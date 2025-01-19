@@ -15,17 +15,57 @@ Os usuários podem ser do tipo "PROFESSOR" ou do tipo "ALUNO";
 O professor contém TURMAS
 Turmas contém GRUPOS (Além de outras descrições)
 Os GRUPOS são compostos por ALUNOS
-Os GRUPOS também contém NOTAS que são referentes aos acompanhamentos. 
+Os GRUPOS também contém NOTAS que são referentes aos acompanhamentos.
 
 Exemplos de rotas que serão desenvolvidas:
 1 - Criar turma:
-    •    POST /api/turmas
-    •    Descrição: Cria uma nova turma vinculada a um professor.
-    •    Body: { "nome": "string", "descricao": "string", "professorId": "string" }
+• POST /api/turmas
+• Descrição: Cria uma nova turma vinculada a um professor.
+• Body: { "nome": "string", "descricao": "string", "professorId": "string" }
 2 - Listar turmas:
-    •    GET /api/turmas
-    •    Descrição: Retorna todas as turmas cadastradas
+• GET /api/turmas
+• Descrição: Retorna todas as turmas cadastradas
 
 --
+user
 
+    id (PK)
+    name
+    email (unique)
+    password
+    role (enum: ADMIN, PROFESSOR, ALUNO)
+    created_at
+    updated_at
 
+classe (TURMAS)
+
+    id (PK)
+    name
+    professor_id (FK -> users.id, only PROFESSOR)
+    created_at
+    updated_at
+
+group (GRUPOS)
+
+    id (PK)
+    name
+    class_id (FK -> classes.id)
+    created_at
+    updated_at
+
+group_members (associação entre alunos e grupos)
+
+    id (PK)
+    group_id (FK -> groups.id)
+    student_id (FK -> users.id, only ALUNO)
+    joined_at
+
+cards
+
+    id (PK)
+    title
+    description
+    created_at
+    updated_at
+    group_id (FK -> groups.id)
+    professor_id (FK -> users.id, only PROFESSOR)
