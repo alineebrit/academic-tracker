@@ -1,0 +1,47 @@
+.header {
+    background-color: #0044cc; /* Cor azul */
+    color: white; /* Texto branco */
+    padding: 15px 20px; /* Espaçamento interno */
+    display: flex;
+    justify-content: space-between; /* Alinha os itens */
+    align-items: center;
+    position: sticky; /* Fixa no topo */
+    top: 0;
+    z-index: 1000; /* Garante que o menu está acima de outros elementos */
+    margin: 0; /* Remove margens */
+    width: 100vw; /* Faz o menu ocupar toda a largura da tela */
+    box-sizing: border-box; /* Inclui padding na largura total */
+  }
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Garante que o conteúdo se espalha corretamente */
+  }
+  
+  .header-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .header-nav ul {
+    list-style: none; /* Remove marcadores da lista */
+    display: flex;
+    gap: 20px; /* Espaçamento entre os links */
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header-nav a {
+    text-decoration: none; /* Remove sublinhado */
+    color: white; /* Cor do texto */
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .header-nav a:hover {
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+  }
+  

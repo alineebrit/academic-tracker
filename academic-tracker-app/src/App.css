@@ -1,0 +1,19 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Altura total */
+}
+
+.app-content {
+  display: flex;
+  flex: 1; /* O conteúdo ocupa o espaço restante */
+}
+
+.main-content {
+  margin-left: 200px; /* Reserva espaço para a Sidebar */
+  padding: 20px;
+  background-color: #ffffff; /* Fundo branco */
+  flex: 1;
+  box-shadow: none; /* Remove sombras */
+  border: none; /* Remove bordas */
+}
