@@ -12,24 +12,24 @@ datasource db {
 }
 
 model Professor {
-  id       String    @id @default(nanoid())
+  id       Int    @id @default(autoincrement())
   name     String
   email    String    @unique
   turmas   Turma[]  
 }
 
 model Turma {
-  id          String    @id @default(nanoid())
+  id          Int    @id @default(autoincrement())
   name        String
-  professorId String
+  professorId Int
   professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
   grupos      Grupo[]  
 }
 
 model Grupo {
-  id         String      @id @default(nanoid())
+  id         Int      @id @default(autoincrement())
   name       String
-  turmaId    String
+  turmaId    Int
   turma      Turma       @relation(fields: [turmaId], references: [id], onDelete: Cascade)
   alunos     Aluno[]    
   cards      Card[]     
@@ -37,28 +37,28 @@ model Grupo {
 }
 
 model Aluno {
-  id      String  @id @default(nanoid())
+  id      Int  @id @default(autoincrement())
   name    String
   email   String  @unique
-  grupoId String
+  grupoId Int
   grupo   Grupo   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
 }
 
 model Card {
-  id        String   @id @default(nanoid())
+  id        Int   @id @default(autoincrement())
   title     String
   content   String?
   createdAt DateTime @default(now())
-  grupoId   String
+  grupoId   Int
   grupo     Grupo    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
 }
 
 model Atividade {
-  id          String    @id @default(nanoid())
+  id          Int    @id @default(autoincrement())
   title       String
   description String?
   dueDate     DateTime?
-  grupoId     String
+  grupoId     Int
   grupo       Grupo     @relation(fields: [grupoId], references: [id], onDelete: Cascade)
 }
 
