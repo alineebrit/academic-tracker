@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Professor {
+  id       String    @id @default(nanoid())
+  name     String
+  email    String    @unique
+  turmas   Turma[]  
+}
+
+model Turma {
+  id          String    @id @default(nanoid())
+  name        String
+  professorId String
+  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
+  grupos      Grupo[]  
+}
+
+model Grupo {
+  id         String      @id @default(nanoid())
+  name       String
+  turmaId    String
+  turma      Turma       @relation(fields: [turmaId], references: [id], onDelete: Cascade)
+  alunos     Aluno[]    
+  cards      Card[]     
+  atividades Atividade[]
+}
+
+model Aluno {
+  id      String  @id @default(nanoid())
+  name    String
+  email   String  @unique
+  grupoId String
+  grupo   Grupo   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+}
+
+model Card {
+  id        String   @id @default(nanoid())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  grupoId   String
+  grupo     Grupo    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+}
+
+model Atividade {
+  id          String    @id @default(nanoid())
+  title       String
+  description String?
+  dueDate     DateTime?
+  grupoId     String
+  grupo       Grupo     @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+}
+
