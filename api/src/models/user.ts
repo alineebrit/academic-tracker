@@ -1,7 +1,6 @@
 import { UserRole } from "./role";
 
 export interface User {
-    id?: number;
     name: string;
     email: string;
     password: string;
@@ -11,7 +10,13 @@ export interface User {
 }
 
 export interface Atividade {
-    id: number;
+    title: string;
+    description?: string;
+    dueDate?: Date;
+    grupoId: number;
+}
+
+export interface Grupo {
     title: string;
     description?: string;
     dueDate?: Date;

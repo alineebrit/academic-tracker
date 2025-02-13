@@ -1,12 +1,18 @@
 import { Router } from "express";
-import atividadeController from "../controllers/atividades.controller";
+import {
+    create,
+    getAll,
+    getById,
+    update,
+    exclude,
+} from "../controllers/atividades.controller";
 
 const router = Router();
 
-router.post("/", atividadeController.create);
-router.get("/", atividadeController.getAll);
-// router.get("/:id", atividadeController.getById);
-router.put("/:id", atividadeController.update);
-router.delete("/:id", atividadeController.delete);
+router.post("/", create);
+router.get("/", getAll);
+router.get("/:id", getById);
+router.put("/:id", update);
+router.delete("/:id", exclude);
 
 export default router;

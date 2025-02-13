@@ -1,64 +1,80 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Atividade } from "./../models/user";
 import { Request, Response } from "express";
-import atividadeService from "../service/atividade.service";
+import {
+    createAtividade,
+    deleteAtividade,
+    getAllAtividade,
+    getByIdAtividade,
+    updateAtividade,
+} from "../service/atividade.service";
 
-class AtividadeController {
-    async create(req: Request, res: Response) {
-        console.log("req", req);
-        console.log("res", res);
-        try {
-            const atividade = await atividadeService.create(req.body);
-            res.status(201).json(atividade);
-        } catch (error) {
-            res.status(500).json({ error: "Erro ao criar atividade" });
-        }
+export const create = async (req: Request, res: Response) => {
+    console.log("cheguei aq");
+    console.log("params", req.params);
+    console.log("body", req.body);
+    console.log("headers", req.headers);
+    try {
+        const atividadeData = req.body;
+        console.log(req.body);
+        const atividade = await createAtividade(atividadeData);
+
+        res.status(201).json({ data: atividade });
+    } catch (error) {
+        res.status(500).json({
+            error: "Não foi possível criar a atividade",
+        });
     }
+};
 
-    async getAll(req: Request, res: Response) {
-        try {
-            const atividades = await atividadeService.getAll();
-            res.json(atividades);
-        } catch (error) {
-            res.status(500).json({ error: "Erro ao buscar atividades" });
-        }
+export const update = async (req: Request, res: Response) => {
+    try {
+        const atividadeId = parseInt(req.params.id, 10);
+        const atividadeData: Atividade = req.body;
+        const atividade = await updateAtividade(atividadeId, atividadeData);
+        res.status(200).json({ data: atividade });
+    } catch (error) {
+        res.status(500).json({
+            error: "Não foi possível criar a atividade",
+        });
     }
+};
 
-    async getById(req: Request, res: Response) {
-        try {
-            const atividade = await atividadeService.getById(
-                parseInt(req.params.id, 10)
-            );
-            if (!atividade) {
-                return res
-                    .status(404)
-                    .json({ error: "Atividade não encontrada" });
-            }
-            res.json(atividade);
-        } catch (error) {
-            res.status(500).json({ error: "Erro ao buscar atividade" });
-        }
+export const getAll = async (req: Request, res: Response) => {
+    try {
+        const getAll = await getAllAtividade();
+
+        res.status(200).json({ data: getAll });
+    } catch (error) {
+        res.status(500).json({
+            error: "Error ao utilizar o getAllAtividades",
+        });
     }
+};
 
-    async update(req: Request, res: Response) {
-        try {
-            const atividade = await atividadeService.update(
-                parseInt(req.params.id, 10),
-                req.body
-            );
-            res.json(atividade);
-        } catch (error) {
-            res.status(500).json({ error: "Erro ao atualizar atividade" });
-        }
+export const getById = async (req: Request, res: any) => {
+    try {
+        const atividadeId = parseInt(req.params.id, 10);
+        const atividade = await getByIdAtividade(atividadeId);
+
+        res.status(200).json({ data: atividade });
+    } catch (err) {
+        res.status(500).json({
+            error: `Não foi possível encontrar a atividade de id ${req.params.id}`,
+        });
     }
+};
 
-    async delete(req: Request, res: Response) {
-        try {
-            await atividadeService.delete(parseInt(req.params.id, 10));
-            res.status(204).send();
-        } catch (error) {
-            res.status(500).json({ error: "Erro ao deletar atividade" });
-        }
+export const exclude = async (req: Request, res: any) => {
+    try {
+        const atividadeId = parseInt(req.params.id, 10);
+        const atividade = await deleteAtividade(atividadeId);
+
+        res.status(204).json({ data: atividade });
+    } catch (err) {
+        res.status(500).json({
+            error: `Não foi possível encontrar a atividade de id ${req.params.id}`,
+        });
     }
-}
-
-export default new AtividadeController();
+};
