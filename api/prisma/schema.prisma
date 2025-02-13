@@ -58,7 +58,8 @@ model Atividade {
   title       String
   description String?
   dueDate     DateTime?
-  grupoId     Int
-  grupo       Grupo     @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  grupoId     Int?
+  grupo       Grupo?     @relation(fields: [grupoId], references: [id], onDelete: Cascade)
 }
+
 

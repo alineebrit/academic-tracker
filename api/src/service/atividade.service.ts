@@ -1,31 +1,27 @@
 import { PrismaClient } from "@prisma/client";
 import { Atividade } from "../models/user";
 
-const prisma = new PrismaClient();
+const atividadeClient = new PrismaClient().atividade;
 
-class AtividadeService {
-    async create(data: Atividade) {
-        return await prisma.atividade.create({ data });
-    }
+export const createAtividade = async (data: Atividade) => {
+    return await atividadeClient.create({ data });
+};
 
-    async getAll() {
-        return await prisma.atividade.findMany();
-    }
+export const getAllAtividade = async () => {
+    return await atividadeClient.findMany();
+};
 
-    async getById(id: number) {
-        return await prisma.atividade.findUnique({ where: { id } });
-    }
+export const getByIdAtividade = async (id: number) => {
+    return await atividadeClient.findUnique({ where: { id } });
+};
 
-    async update(
-        id: number,
-        data: Partial<{ title: string; description: string; dueDate: Date }>
-    ) {
-        return await prisma.atividade.update({ where: { id }, data });
-    }
+export const updateAtividade = async (
+    atividadeId: number,
+    data: Partial<{ title: string; description: string; dueDate: Date }>
+) => {
+    return await atividadeClient.update({ where: { id: atividadeId }, data });
+};
 
-    async delete(id: number) {
-        return await prisma.atividade.delete({ where: { id } });
-    }
-}
-
-export default new AtividadeService();
+export const deleteAtividade = async (id: number) => {
+    return await atividadeClient.delete({ where: { id } });
+};
