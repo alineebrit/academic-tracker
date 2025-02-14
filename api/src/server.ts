@@ -2,6 +2,7 @@ import express from "express";
 import { config } from "dotenv";
 import cors from "cors";
 import atividadeRoutes from "./routes/atividades.routes";
+import userRoutes from "./routes/user.routes";
 
 config();
 const app = express();
@@ -19,5 +20,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/atividades", atividadeRoutes);
+app.use("/user", userRoutes);
 
 export default app;

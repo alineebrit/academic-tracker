@@ -1,27 +1,36 @@
-import { PrismaClient } from "@prisma/client";
 import { Atividade } from "../models/user";
+import { AtividadeRepository } from "../repositories/atividade.repository";
 
-const atividadeClient = new PrismaClient().atividade;
+export class AtividadeService {
+    private atividadeRepository: AtividadeRepository;
 
-export const createAtividade = async (data: Atividade) => {
-    return await atividadeClient.create({ data });
-};
+    constructor() {
+        this.atividadeRepository = new AtividadeRepository();
+    }
 
-export const getAllAtividade = async () => {
-    return await atividadeClient.findMany();
-};
+    createAtividade = async (data: Atividade) => {
+        return await this.atividadeRepository.createAtividade(data);
+    };
 
-export const getByIdAtividade = async (id: number) => {
-    return await atividadeClient.findUnique({ where: { id } });
-};
+    getAllAtividade = async () => {
+        return await this.atividadeRepository.getAllAtividade();
+    };
 
-export const updateAtividade = async (
-    atividadeId: number,
-    data: Partial<{ title: string; description: string; dueDate: Date }>
-) => {
-    return await atividadeClient.update({ where: { id: atividadeId }, data });
-};
+    getAtividadeById = async (id: number) => {
+        return await this.atividadeRepository.getByIdAtividade(id);
+    };
 
-export const deleteAtividade = async (id: number) => {
-    return await atividadeClient.delete({ where: { id } });
-};
+    updateAtividade = async (
+        atividadeId: number,
+        data: Partial<{ title: string; description: string; dueDate: Date }>
+    ) => {
+        return await this.atividadeRepository.updateAtividade(
+            atividadeId,
+            data
+        );
+    };
+
+    deleteAtividade = async (id: number) => {
+        return await this.atividadeRepository.deleteAtividade(id);
+    };
+}
