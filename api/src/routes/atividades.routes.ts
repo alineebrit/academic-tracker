@@ -1,18 +1,13 @@
 import { Router } from "express";
-import {
-    create,
-    getAll,
-    getById,
-    update,
-    exclude,
-} from "../controllers/atividades.controller";
+import { AtividadeController } from "../controllers/atividades.controller";
 
 const router = Router();
+const atividadeController = new AtividadeController();
 
-router.post("/", create);
-router.get("/", getAll);
-router.get("/:id", getById);
-router.put("/:id", update);
-router.delete("/:id", exclude);
+router.post("/", atividadeController.createAtividade);
+router.get("/", atividadeController.getAllAtividades);
+router.get("/:id", atividadeController.getAtividadeById);
+router.put("/:id", atividadeController.updateAtividade);
+router.delete("/:id", atividadeController.deleteAtividade);
 
 export default router;
