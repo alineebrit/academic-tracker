@@ -12,11 +12,14 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  email     String  @unique
+  email     String   @unique
   password  String
-  role      UserRole
+  role      UserRole?
+  turmas    Turma[]
+  grupoId   Int?
+  grupo     Grupo?   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -27,41 +30,32 @@ enum UserRole {
   ALUNO
 }
 
-model Professor {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String    @unique
-  turmas   Turma[]  
-}
-
 model Turma {
-  id          Int    @id @default(autoincrement())
-  name        String
-  professorId Int
-  professor   Professor @relation(fields: [professorId], references: [id], onDelete: Cascade)
-  grupos      Grupo[]  
+  id     Int     @id @default(autoincrement())
+  name   String
+  userId Int
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grupos Grupo[]
 }
 
 model Grupo {
-  id         Int      @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
   name       String
   turmaId    Int
   turma      Turma       @relation(fields: [turmaId], references: [id], onDelete: Cascade)
-  alunos     Aluno[]    
-  cards      Card[]     
+  cards      Card[]
   atividades Atividade[]
+  user       User[]
 }
 
 model Aluno {
-  id      Int  @id @default(autoincrement())
-  name    String
-  email   String  @unique
-  grupoId Int
-  grupo   Grupo   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
 }
 
 model Card {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   title     String
   content   String?
   createdAt DateTime @default(now())
@@ -70,12 +64,10 @@ model Card {
 }
 
 model Atividade {
-  id          Int    @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   description String?
   dueDate     DateTime?
   grupoId     Int?
-  grupo       Grupo?     @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  grupo       Grupo?    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
 }
-
-

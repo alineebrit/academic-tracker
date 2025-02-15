@@ -20,10 +20,7 @@ export class UserService {
         return await this.userRepository.getByIdUser(id);
     };
 
-    updateUser = async (
-        userId: number,
-        data: Partial<{ title: string; description: string; dueDate: Date }>
-    ) => {
+    updateUser = async (userId: number, data: User) => {
         return await this.userRepository.updateUser(userId, data);
     };
 

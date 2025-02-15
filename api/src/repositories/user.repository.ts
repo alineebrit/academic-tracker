@@ -16,11 +16,8 @@ export class UserRepository {
         return await this.UserClient.findUnique({ where: { id } });
     };
 
-    updateUser = async (
-        UserId: number,
-        data: Partial<{ title: string; description: string; dueDate: Date }>
-    ) => {
-        return await this.UserClient.update({ where: { id: UserId }, data });
+    updateUser = async (userId: number, data: User) => {
+        return await this.UserClient.update({ where: { id: userId }, data });
     };
 
     deleteUser = async (id: number) => {

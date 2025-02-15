@@ -4,12 +4,13 @@ import { Request, Response } from "express";
 import { UserService } from "../service/user.service";
 
 export class UserController {
-    private userService: UserService;
+    private readonly userService: UserService;
 
     constructor() {
         this.userService = new UserService();
     }
 
+    //TODO: adicionar validação de user type
     createUser = async (req: Request, res: Response) => {
         try {
             const userData: User = req.body;
