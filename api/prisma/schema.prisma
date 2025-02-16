@@ -16,7 +16,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      UserRole?
+  role      UserRole
   turmas    Turma[]
   grupoId   Int?
   grupo     Grupo?   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
