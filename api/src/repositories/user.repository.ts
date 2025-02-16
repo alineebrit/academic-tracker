@@ -4,6 +4,10 @@ import { User } from "../models/user";
 export class UserRepository {
     userClient = new PrismaClient().user;
 
+    constructor() {
+        this.userClient = new PrismaClient().user;
+    }
+
     createUser = async (data: User) => {
         return await this.userClient.create({ data });
     };

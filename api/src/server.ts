@@ -23,5 +23,6 @@ app.use(express.json());
 app.use("/atividades", atividadeRoutes);
 app.use("/user", userRoutes);
 app.use("/turma", turmaRoutes);
-
+//grupo "/turma/:id/grupo"
+//notes
 export default app;
