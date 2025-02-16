@@ -9,6 +9,9 @@ export class UserService {
     }
 
     createUser = async (data: User) => {
+        if (await this.verifyUniqueUser(data.email)) {
+            throw new Error("O email já está cadastrado.");
+        }
         return await this.userRepository.createUser(data);
     };
 
@@ -20,15 +23,18 @@ export class UserService {
         return await this.userRepository.getByIdUser(id);
     };
 
-    updateUser = async (
-        userId: number,
-        data: Partial<{ title: string; description: string; dueDate: Date }>
-    ) => {
+    updateUser = async (userId: number, data: User) => {
         return await this.userRepository.updateUser(userId, data);
     };
 
     deleteUser = async (id: number) => {
         return await this.userRepository.deleteUser(id);
+    };
+
+    verifyUniqueUser = async (email: string) => {
+        return await this.userRepository
+            .countByEmail(email)
+            .then((e) => e >= 1);
     };
 
     // async verificarPermissao(userId: number, requiredRole: string) {

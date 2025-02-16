@@ -1,44 +1,53 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { User } from "./../models/user";
+import { User } from "../models/user";
+import { UserRole } from "../models/role";
 import { Request, Response } from "express";
 import { UserService } from "../service/user.service";
 
 export class UserController {
-    private userService: UserService;
+    private readonly userService: UserService;
 
     constructor() {
         this.userService = new UserService();
     }
 
-    createUser = async (req: Request, res: Response) => {
+    createUser = async (req: Request, res: Response): Promise<void> => {
         try {
             const userData: User = req.body;
-            const { email, name, password }: User = req.body;
+            const { email, name, password, role }: User = req.body;
 
-            if (!email) {
-                res.status(401).json({
-                    error: "O email do usuário é obrigatório",
+            if (!email || !name || !password) {
+                res.status(400).json({
+                    error: "Campo obrigatório não preenchido",
                 });
+                return;
             }
 
-            if (!name) {
-                res.status(401).json({
-                    error: "É necessário preencher o nome do usuário",
+            if (
+                !role ||
+                ![UserRole.ADMIN, UserRole.ALUNO, UserRole.PROFESSOR].includes(
+                    role
+                )
+            ) {
+                res.status(400).json({
+                    error: "Adicione um tipo válido de usuário",
                 });
+                return;
             }
 
-            if (!password) {
-                res.status(401).json({
-                    error: "É necessário preencher a senha",
-                });
+            if (password && email && name && role) {
+                const user = await this.userService.createUser(userData);
+                res.status(201).json({ data: user });
+                return;
             }
-
-            const user = await this.userService.createUser(userData);
-            res.status(201).json({ data: user });
         } catch (error) {
-            res.status(500).json({
-                error,
-            });
+            if (error instanceof Error)
+                if (error.message === "O email já está cadastrado.") {
+                    res.status(400).json({ error: error.message });
+                    return;
+                }
+            res.status(500).json({ error: "Erro interno do servidor" });
+            return;
         }
     };
 
