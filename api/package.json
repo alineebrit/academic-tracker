@@ -4,7 +4,10 @@
     "description": "https://github.com/joseglauberbo/ProgWeb24.2",
     "main": "index.js",
     "scripts": {
-        "start": "node dist/server.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js",
+        "start:dev": "nodemon --watch 'src/' --exec 'ts-node src/server.ts' -e ts",
+        "migrate": "prisma migrate dev",
         "build": "tsc",
         "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts"
     },
@@ -12,7 +15,6 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@prisma/client": "^6.3.1",
         "@types/cors": "^2.8.17",
         "cors": "^2.8.5",
         "dotenv": "^16.4.7",
@@ -22,6 +24,8 @@
         "@eslint/js": "^9.18.0",
         "@types/express": "^5.0.0",
         "@types/node": "^22.10.6",
+        "@types/swagger-jsdoc": "^6.0.4",
+        "@types/swagger-ui-express": "^4.1.7",
         "eslint": "^9.18.0",
         "eslint-config-prettier": "^10.0.1",
         "globals": "^15.14.0",

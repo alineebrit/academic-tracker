@@ -1,26 +1,29 @@
 import { PrismaClient } from "@prisma/client";
 import { Note } from "../models/note";
 
-const prisma = new PrismaClient();
-
 export class NoteRepository {
-  async create(note: Note): Promise<Note> {
-    return await prisma.note.create({ data: note });
-  }
+    noteClient = new PrismaClient().note;
 
-  async findAll(): Promise<Note[]> {
-    return await prisma.note.findMany();
-  }
+    constructor() {
+        this.noteClient = new PrismaClient().note;
+    }
+    createNote = async (data: Note) => {
+        return await this.noteClient.create({ data });
+    };
 
-  async findById(id: number): Promise<Note | null> {
-    return await prisma.note.findUnique({ where: { id } });
-  }
+    async findAll() {
+        return await this.noteClient.findMany();
+    }
 
-  async update(id: number, note: Note): Promise<Note | null> {
-    return await prisma.note.update({ where: { id }, data: note });
-  }
+    async findById(id: number) {
+        return await this.noteClient.findUnique({ where: { id } });
+    }
 
-  async delete(id: number): Promise<Note | null> {
-    return await prisma.note.delete({ where: { id } });
-  }
+    async update(id: number, note: Note) {
+        return await this.noteClient.update({ where: { id }, data: note });
+    }
+
+    async delete(id: number) {
+        return await this.noteClient.delete({ where: { id } });
+    }
 }

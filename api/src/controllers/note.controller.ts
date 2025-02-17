@@ -13,20 +13,23 @@ export class NoteController {
     createNote = async (req: Request, res: Response) => {
         try {
             const noteData: Note = req.body;
-            const titulo = noteData.titulo;
+            const titulo = noteData.title;
 
             if (!titulo) {
-                return res.status(400).json({
+                res.status(400).json({
                     error: "Título da nota não preenchido",
                 });
+                return;
             }
 
             const note = await this.noteService.createNote(noteData);
             res.status(201).json({ data: note });
+            return;
         } catch (error) {
             res.status(500).json({
                 error: "Não foi possível criar a nota",
             });
+            return;
         }
     };
 
@@ -35,19 +38,25 @@ export class NoteController {
             const { id } = req.params;
             const noteData: Note = req.body;
 
-            const updatedNote = await this.noteService.updateNote(Number(id), noteData);
+            const updatedNote = await this.noteService.updateNote(
+                Number(id),
+                noteData
+            );
 
             if (!updatedNote) {
-                return res.status(404).json({
+                res.status(404).json({
                     error: `Nota de ID ${id} não encontrada`,
                 });
+                return;
             }
 
             res.status(200).json({ data: updatedNote });
+            return;
         } catch (error) {
             res.status(500).json({
                 error: "Não foi possível atualizar a nota",
             });
+            return;
         }
     };
 
@@ -68,9 +77,10 @@ export class NoteController {
             const note = await this.noteService.getNoteById(noteId);
 
             if (!note) {
-                return res.status(404).json({
+                res.status(404).json({
                     error: `Nota de ID ${req.params.id} não encontrada`,
                 });
+                return;
             }
 
             res.status(200).json({ data: note });
@@ -87,16 +97,19 @@ export class NoteController {
             const deletedNote = await this.noteService.deleteNote(noteId);
 
             if (!deletedNote) {
-                return res.status(404).json({
+                res.status(404).json({
                     error: `Nota de ID ${req.params.id} não encontrada`,
                 });
+                return;
             }
 
-            res.status(204).send();
+            res.status(204).json({ message: "Note deletada com sucesso" });
+            return;
         } catch (error) {
             res.status(500).json({
                 error: `Erro ao excluir a nota de ID ${req.params.id}`,
             });
+            return;
         }
     };
 }

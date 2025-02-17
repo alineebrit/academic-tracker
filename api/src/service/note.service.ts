@@ -2,25 +2,25 @@ import { NoteRepository } from "../repositories/note.repository";
 import { Note } from "../models/note";
 
 export class NoteService {
-  private noteRepository = new NoteRepository();
+    private noteRepository = new NoteRepository();
 
-  async createNote(note: Note): Promise<Note> {
-    return await this.noteRepository.create(note);
-  }
+    async createNote(note: Note) {
+        return await this.noteRepository.createNote(note);
+    }
 
-  async getAllNotes(): Promise<Note[]> {
-    return await this.noteRepository.findAll();
-  }
+    async getAllNotes() {
+        return await this.noteRepository.findAll();
+    }
 
-  async getNoteById(id: number): Promise<Note | null> {
-    return await this.noteRepository.findById(id);
-  }
+    async getNoteById(id: number) {
+        return await this.noteRepository.findById(id);
+    }
 
-  async updateNote(id: number, note: Note): Promise<Note | null> {
-    return await this.noteRepository.update(id, note);
-  }
+    async updateNote(id: number, note: Note) {
+        return await this.noteRepository.update(id, note);
+    }
 
-  async deleteNote(id: number): Promise<Note | null> {
-    return await this.noteRepository.delete(id);
-  }
+    async deleteNote(id: number) {
+        return await this.noteRepository.delete(id);
+    }
 }

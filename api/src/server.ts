@@ -18,7 +18,7 @@ app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.get("/", (req, res) => {
-  res.send("hello world");
+    res.send("hello world");
 });
 
 app.use("/atividades", atividadeRoutes);
@@ -26,8 +26,8 @@ app.use("/user", userRoutes);
 app.use("/turma", turmaRoutes);
 app.use("/notes", noteRoutes);
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-  console.log(`Swagger disponível em http://localhost:${PORT}/api-docs`);
+    console.log(`Servidor rodando na porta ${PORT}`);
+    console.log(`Swagger disponível em http://localhost:${PORT}/api-docs`);
 });
 
 export default app;
