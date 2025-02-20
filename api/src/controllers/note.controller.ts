@@ -4,7 +4,7 @@ import { NoteService } from "../service/note.service";
 import { Note } from "../models/note";
 
 export class NoteController {
-    private noteService: NoteService;
+    private readonly noteService: NoteService;
 
     constructor() {
         this.noteService = new NoteService();

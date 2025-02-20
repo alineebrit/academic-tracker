@@ -4,7 +4,7 @@ import { GrupoService } from "../service/grupo.service";
 import { Grupo } from "../models/grupo";
 
 export class GrupoController {
-    private grupoService: GrupoService;
+    private readonly grupoService: GrupoService;
 
     constructor() {
         this.grupoService = new GrupoService();

@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { AtividadeService } from "../service/atividade.service";
 
 export class AtividadeController {
-    private atividadeService: AtividadeService;
+    private readonly atividadeService: AtividadeService;
 
     constructor() {
         this.atividadeService = new AtividadeService();

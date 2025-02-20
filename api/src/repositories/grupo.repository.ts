@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import { Grupo } from "@prisma/client";
+import { Grupo } from "../models/grupo";
 
 export class GrupoRepository {
     grupoClient = new PrismaClient().grupo;
@@ -9,8 +9,8 @@ export class GrupoRepository {
     }
 
     createGrupo = async (data: Grupo) => {
-            return await this.grupoClient.create({ data });
-        };
+        return await this.grupoClient.create({ data });
+    };
 
     async findAll() {
         return await this.grupoClient.findMany();

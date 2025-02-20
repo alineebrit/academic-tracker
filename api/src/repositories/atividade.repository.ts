@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Atividade } from "../models/user";
+import { Atividade } from "../models/atividade";
 export class AtividadeRepository {
     atividadeClient = new PrismaClient().atividade;
 
