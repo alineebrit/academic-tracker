@@ -1,4 +1,4 @@
-import { Turma } from "../models/user";
+import { Turma } from "../models/turma";
 import { TurmaRepository } from "../repositories/turma.repository";
 
 export class TurmaService {

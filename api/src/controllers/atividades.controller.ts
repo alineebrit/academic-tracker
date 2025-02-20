@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Atividade } from "./../models/user";
+import { Atividade } from "./../models/atividade";
 import { Request, Response } from "express";
 import { AtividadeService } from "../service/atividade.service";
 

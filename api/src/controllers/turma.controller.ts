@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Turma } from "./../models/user";
+import { Turma } from "./../models/turma";
 import { Request, Response } from "express";
 import { TurmaService } from "../service/turma.service";
 

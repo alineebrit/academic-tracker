@@ -60,6 +60,7 @@ export class UserController {
             res.status(500).json({
                 error: "Error ao utilizar o getAllUsers",
             });
+            return;
         }
     };
 
@@ -73,6 +74,7 @@ export class UserController {
             res.status(500).json({
                 error: `Não foi possível encontrar o usuário de id ${req.params.id}`,
             });
+            return;
         }
     };
 
@@ -91,19 +93,22 @@ export class UserController {
             res.status(500).json({
                 error: "Não foi possível atualizar o usuário",
             });
+            return;
         }
     };
 
     deleteUser = async (req: Request, res: Response) => {
         try {
             const userId = parseInt(req.params.id, 10);
-            const user = await this.userService.deleteUser(userId);
+            await this.userService.deleteUser(userId);
 
             res.status(204).json({ message: "Usuário deletado com sucesso" });
+            return;
         } catch (err) {
             res.status(500).json({
                 error: `Não foi possível excluir o usuário de id ${req.params.id}`,
             });
+            return;
         }
     };
 

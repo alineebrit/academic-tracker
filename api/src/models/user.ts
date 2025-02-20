@@ -10,22 +10,3 @@ export interface User {
     createdAt: Date;
     updatedAt: Date;
 }
-
-export interface Atividade {
-    title: string;
-    description?: string;
-    dueDate?: Date;
-    grupoId: number;
-}
-
-export interface Grupo {
-    title: string;
-    description?: string;
-    dueDate?: Date;
-    grupoId: number;
-}
-
-export interface Turma {
-    name: string;
-    userId: number;
-}
