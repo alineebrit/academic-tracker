@@ -26,10 +26,10 @@ const grupoController = new GrupoController();
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Grupo A"
+ *                 example: "grupoteste"
  *               turmaId:
  *                 type: integer
- *                 example: 1
+ *                 example: 2
  *     responses:
  *       201:
  *         description: Grupo criado com sucesso
