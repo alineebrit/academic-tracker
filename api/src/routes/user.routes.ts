@@ -24,16 +24,20 @@ const userController = new UserController();
  *           schema:
  *             type: object
  *             properties:
- *               nome:
+ *               name:
  *                 type: string
  *                 example: "João da Silva"
  *               email:
  *                 type: string
  *                 format: email
  *                 example: "joao@email.com"
- *               senha:
+ *               password:
  *                 type: string
  *                 example: "123456"
+ *               role:
+ *                 type: string
+ *                 enum: [ALUNO, PROFESSOR]
+ *                 example: "ALUNO"
  *     responses:
  *       201:
  *         description: Usuário criado com sucesso
@@ -61,12 +65,15 @@ router.post("/", userController.createUser);
  *                   id:
  *                     type: integer
  *                     example: 1
- *                   nome:
+ *                   name:
  *                     type: string
  *                     example: "Maria Souza"
  *                   email:
  *                     type: string
  *                     example: "maria@email.com"
+ *                   role:
+ *                     type: string
+ *                     example: "PROFESSOR"
  */
 router.get("/", userController.getAllUsers);
 
@@ -94,12 +101,15 @@ router.get("/", userController.getAllUsers);
  *                 id:
  *                   type: integer
  *                   example: 1
- *                 nome:
+ *                 name:
  *                   type: string
  *                   example: "Pedro Lima"
  *                 email:
  *                   type: string
  *                   example: "pedro@email.com"
+ *                 role:
+ *                   type: string
+ *                   example: "ALUNO"
  *       404:
  *         description: Usuário não encontrado
  */
@@ -125,16 +135,20 @@ router.get("/:id", userController.getUserById);
  *           schema:
  *             type: object
  *             properties:
- *               nome:
+ *               name:
  *                 type: string
  *                 example: "Ana Pereira"
  *               email:
  *                 type: string
  *                 format: email
  *                 example: "ana@email.com"
- *               senha:
+ *               password:
  *                 type: string
  *                 example: "novaSenha123"
+ *               role:
+ *                 type: string
+ *                 enum: [ALUNO, PROFESSOR]
+ *                 example: "PROFESSOR"
  *     responses:
  *       200:
  *         description: Usuário atualizado com sucesso

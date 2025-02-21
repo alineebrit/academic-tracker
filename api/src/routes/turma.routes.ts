@@ -24,12 +24,12 @@ const turmaController = new TurmaController();
  *           schema:
  *             type: object
  *             properties:
- *               nome:
+ *               name:
  *                 type: string
- *                 example: "Turma A"
- *               descricao:
- *                 type: string
- *                 example: "Turma do 5º ano - Matemática"
+ *                 example: "turmateste"
+ *               userId:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       201:
  *         description: Turma criada com sucesso
@@ -57,12 +57,12 @@ router.post("/", turmaController.createTurma);
  *                   id:
  *                     type: integer
  *                     example: 1
- *                   nome:
+ *                   name:
  *                     type: string
  *                     example: "Turma A"
- *                   descricao:
- *                     type: string
- *                     example: "Turma do 5º ano - Matemática"
+ *                   userId:
+ *                     type: integer
+ *                     example: 1
  */
 router.get("/", turmaController.getAllTurmas);
 
@@ -90,12 +90,12 @@ router.get("/", turmaController.getAllTurmas);
  *                 id:
  *                   type: integer
  *                   example: 1
- *                 nome:
+ *                 name:
  *                   type: string
  *                   example: "Turma A"
- *                 descricao:
- *                   type: string
- *                   example: "Turma do 5º ano - Matemática"
+ *                 userId:
+ *                   type: integer
+ *                   example: 1
  *       404:
  *         description: Turma não encontrada
  */
@@ -121,12 +121,12 @@ router.get("/:id", turmaController.getTurmaById);
  *           schema:
  *             type: object
  *             properties:
- *               nome:
+ *               name:
  *                 type: string
  *                 example: "Turma B"
- *               descricao:
- *                 type: string
- *                 example: "Turma de reforço em Matemática"
+ *               userId:
+ *                 type: integer
+ *                 example: 2
  *     responses:
  *       200:
  *         description: Turma atualizada com sucesso
