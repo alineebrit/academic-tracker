@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { User } from "../models/user";
-import { UserRole } from "../models/role";
+import { $Enums, User } from "@prisma/client";
 import { Request, Response } from "express";
 import { UserService } from "../service/user.service";
 
@@ -25,9 +24,11 @@ export class UserController {
 
             if (
                 !role ||
-                ![UserRole.ADMIN, UserRole.ALUNO, UserRole.PROFESSOR].includes(
-                    role
-                )
+                ![
+                    $Enums.UserRole.ADMIN,
+                    $Enums.UserRole.ALUNO,
+                    $Enums.UserRole.PROFESSOR,
+                ].includes(role)
             ) {
                 res.status(400).json({
                     error: "Adicione um tipo válido de usuário",

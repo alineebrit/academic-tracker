@@ -1,4 +1,4 @@
-import { User } from "../models/user";
+import { User } from "@prisma/client";
 import { UserRepository } from "../repositories/user.repository";
 
 export class UserService {

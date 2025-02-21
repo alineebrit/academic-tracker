@@ -5,6 +5,7 @@ import atividadeRoutes from "./routes/atividades.routes";
 import userRoutes from "./routes/user.routes";
 import turmaRoutes from "./routes/turma.routes";
 import noteRoutes from "./routes/note.routes";
+import grupoRoutes from "./routes/grupo.routes";
 import { swaggerUi, swaggerDocs } from "./config/swagger"; // 🔹 Importando o Swagger
 
 config();
@@ -25,6 +26,7 @@ app.use("/atividades", atividadeRoutes);
 app.use("/user", userRoutes);
 app.use("/turma", turmaRoutes);
 app.use("/notes", noteRoutes);
+app.use("/grupo", grupoRoutes);
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
     console.log(`Swagger disponível em http://localhost:${PORT}/api-docs`);

@@ -1,5 +1,4 @@
-import { PrismaClient, Prisma } from "@prisma/client";
-import { Grupo } from "../models/grupo";
+import { PrismaClient, Prisma, Grupo } from "@prisma/client";
 
 export class GrupoRepository {
     grupoClient = new PrismaClient().grupo;

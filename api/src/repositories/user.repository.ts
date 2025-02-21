@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import { User } from "../models/user";
+import { $Enums, PrismaClient, User } from "@prisma/client";
 
 export class UserRepository {
     userClient = new PrismaClient().user;
@@ -22,8 +21,12 @@ export class UserRepository {
         return await this.userClient.findMany();
     };
 
-    getByIdUser = async (id: number) => {
+    getByIdUser = async (id: number): Promise<User | null> => {
         return await this.userClient.findUnique({ where: { id } });
+    };
+
+    getUserRole = async (id: number): Promise<$Enums.UserRole | undefined> => {
+        return this.getByIdUser(id).then((e) => e?.role);
     };
 
     updateUser = async (userId: number, data: User) => {

@@ -1,5 +1,5 @@
 import { GrupoRepository } from "../repositories/grupo.repository";
-import { Grupo } from "../models/grupo";
+import { Grupo } from "@prisma/client";
 
 export class GrupoService {
     private readonly grupoRepository = new GrupoRepository();
