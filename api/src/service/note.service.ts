@@ -2,7 +2,7 @@ import { NoteRepository } from "../repositories/note.repository";
 import { Note } from "../models/note";
 
 export class NoteService {
-    private noteRepository = new NoteRepository();
+    private readonly noteRepository = new NoteRepository();
 
     async createNote(note: Note) {
         return await this.noteRepository.createNote(note);

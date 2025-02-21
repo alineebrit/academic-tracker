@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Turma } from "./../models/user";
+import { Turma } from "@prisma/client";
 import { Request, Response } from "express";
 import { TurmaService } from "../service/turma.service";
 
@@ -12,21 +12,27 @@ export class TurmaController {
 
     createTurma = async (req: Request, res: Response) => {
         try {
-            const turmaData: Turma = req.body;
-            const title = turmaData.name;
+            const { name, userId }: Turma = req.body;
 
-            if (!title) {
+            if (!name || !userId) {
                 res.status(401).json({
-                    error: "Nome da Turma não preenchido",
+                    error: "Campo obrigatório não preenchido",
                 });
             }
 
-            const Turma = await this.turmaService.createTurma(turmaData);
-            res.status(201).json({ data: Turma });
+            const turma = await this.turmaService.createTurma(req.body);
+            res.status(201).json({ data: turma });
         } catch (error) {
-            res.status(500).json({
-                error: "Não foi possível criar a Turma",
-            });
+            if (error instanceof Error)
+                if (
+                    error.message ===
+                    "Usuário do tipo ALUNO não pode criar uma turma"
+                ) {
+                    res.status(400).json({ error: error.message });
+                    return;
+                }
+            res.status(500).json({ error: "Erro interno do servidor" });
+            return;
         }
     };
 

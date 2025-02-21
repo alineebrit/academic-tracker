@@ -1,8 +1,8 @@
 import { GrupoRepository } from "../repositories/grupo.repository";
-import { Grupo } from "../models/grupo";
+import { Grupo } from "@prisma/client";
 
 export class GrupoService {
-    private grupoRepository = new GrupoRepository();
+    private readonly grupoRepository = new GrupoRepository();
 
     async createGrupo(grupo: Grupo) {
         return await this.grupoRepository.createGrupo(grupo);

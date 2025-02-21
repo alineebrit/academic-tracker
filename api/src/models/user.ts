@@ -1,4 +1,4 @@
-import { UserRole } from "./role";
+import { UserRole } from "@prisma/client";
 
 export interface User {
     id: number;
@@ -9,23 +9,4 @@ export interface User {
     grupoId?: number;
     createdAt: Date;
     updatedAt: Date;
-}
-
-export interface Atividade {
-    title: string;
-    description?: string;
-    dueDate?: Date;
-    grupoId: number;
-}
-
-export interface Grupo {
-    title: string;
-    description?: string;
-    dueDate?: Date;
-    grupoId: number;
-}
-
-export interface Turma {
-    name: string;
-    userId: number;
 }

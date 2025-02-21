@@ -1,8 +1,8 @@
-import { Atividade } from "../models/user";
+import { Atividade } from "../models/atividade";
 import { AtividadeRepository } from "../repositories/atividade.repository";
 
 export class AtividadeService {
-    private atividadeRepository: AtividadeRepository;
+    private readonly atividadeRepository: AtividadeRepository;
 
     constructor() {
         this.atividadeRepository = new AtividadeRepository();

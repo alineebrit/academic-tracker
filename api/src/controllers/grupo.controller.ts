@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from "express";
 import { GrupoService } from "../service/grupo.service";
-import { Grupo } from "../models/grupo";
+import { Grupo } from "@prisma/client";
 
 export class GrupoController {
-    private grupoService: GrupoService;
+    private readonly grupoService: GrupoService;
 
     constructor() {
         this.grupoService = new GrupoService();

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { User } from "../models/user";
-import { UserRole } from "../models/role";
+import { $Enums, User } from "@prisma/client";
 import { Request, Response } from "express";
 import { UserService } from "../service/user.service";
 
@@ -25,9 +24,11 @@ export class UserController {
 
             if (
                 !role ||
-                ![UserRole.ADMIN, UserRole.ALUNO, UserRole.PROFESSOR].includes(
-                    role
-                )
+                ![
+                    $Enums.UserRole.ADMIN,
+                    $Enums.UserRole.ALUNO,
+                    $Enums.UserRole.PROFESSOR,
+                ].includes(role)
             ) {
                 res.status(400).json({
                     error: "Adicione um tipo válido de usuário",
@@ -60,6 +61,7 @@ export class UserController {
             res.status(500).json({
                 error: "Error ao utilizar o getAllUsers",
             });
+            return;
         }
     };
 
@@ -73,6 +75,7 @@ export class UserController {
             res.status(500).json({
                 error: `Não foi possível encontrar o usuário de id ${req.params.id}`,
             });
+            return;
         }
     };
 
@@ -91,19 +94,22 @@ export class UserController {
             res.status(500).json({
                 error: "Não foi possível atualizar o usuário",
             });
+            return;
         }
     };
 
     deleteUser = async (req: Request, res: Response) => {
         try {
             const userId = parseInt(req.params.id, 10);
-            const user = await this.userService.deleteUser(userId);
+            await this.userService.deleteUser(userId);
 
             res.status(204).json({ message: "Usuário deletado com sucesso" });
+            return;
         } catch (err) {
             res.status(500).json({
                 error: `Não foi possível excluir o usuário de id ${req.params.id}`,
             });
+            return;
         }
     };
 

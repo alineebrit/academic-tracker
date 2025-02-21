@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Turma } from "../models/user";
+import { Turma } from "../models/turma";
 
 export class TurmaRepository {
     turmaClient = new PrismaClient().turma;
