@@ -12,16 +12,16 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
   role      UserRole
   turmas    Turma[]
   grupoId   Int?
-  grupo     Grupo?   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  grupo     Grupo?    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 enum UserRole {
