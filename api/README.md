@@ -69,3 +69,7 @@ cards
     updated_at
     group_id (FK -> groups.id)
     professor_id (FK -> users.id, only PROFESSOR)
+
+## Testar as rotas de autenticação
+
+Adicionar no Header da Request: [KEY] Authorization [VALUE] Bearer MINHA_CHAVE

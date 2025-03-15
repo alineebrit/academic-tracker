@@ -1,27 +1,30 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import dotenv from 'dotenv';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-const SECRET_KEY = process.env.JWT_SECRET || 'sua_chave_secreta';
+dotenv.config();
 
 export const authenticateToken = (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    const token = req.header('Authorization');
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
-        return res.status(401).json({ message: 'Acesso negado' });
+    if (!authHeader) {
+        res.status(401).json({ message: 'Token não fornecido' });
+        return;
     }
 
-    try {
-        const decoded = jwt.verify(token.replace('Bearer ', ''), SECRET_KEY);
+    const token = authHeader.split(' ')[1];
 
-        (req as any).user = decoded;
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+        req.user = decoded;
         next();
     } catch (error) {
-        return res.status(403).json({ message: 'Token inválido' });
+        res.status(401).json({ message: 'Token inválido' });
+        return;
     }
 };

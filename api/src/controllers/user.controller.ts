@@ -48,9 +48,18 @@ export class UserController {
 
     getAllUsers = async (req: Request, res: Response) => {
         try {
+            if (!req.user) {
+                res.status(401).json({ message: 'Não autorizado' });
+                return;
+            }
             const getAll = await this.userService.getAllUsers();
 
-            res.status(200).json({ data: getAll });
+            res.status(200).json({
+                data: getAll,
+                message: 'Você acessou um endpoint protegido!',
+                user: req.user,
+            });
+            return;
         } catch (error) {
             res.status(500).json({
                 error: 'Error ao utilizar o getAllUsers',

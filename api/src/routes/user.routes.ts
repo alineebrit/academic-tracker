@@ -1,5 +1,6 @@
-import { Router } from "express";
-import { UserController } from "../controllers/user.controller";
+import { Router } from 'express';
+import { UserController } from '../controllers/user.controller';
+import { authenticateToken } from '../middlewares/auth.middlewares';
 
 const router = Router();
 const userController = new UserController();
@@ -44,7 +45,7 @@ const userController = new UserController();
  *       400:
  *         description: Erro na requisição
  */
-router.post("/", userController.createUser);
+router.post('/', userController.createUser);
 
 /**
  * @swagger
@@ -75,7 +76,7 @@ router.post("/", userController.createUser);
  *                     type: string
  *                     example: "PROFESSOR"
  */
-router.get("/", userController.getAllUsers);
+router.get('/', authenticateToken, userController.getAllUsers);
 
 /**
  * @swagger
@@ -113,7 +114,7 @@ router.get("/", userController.getAllUsers);
  *       404:
  *         description: Usuário não encontrado
  */
-router.get("/:id", userController.getUserById);
+router.get('/:id', userController.getUserById);
 
 /**
  * @swagger
@@ -157,7 +158,7 @@ router.get("/:id", userController.getUserById);
  *       404:
  *         description: Usuário não encontrado
  */
-router.put("/:id", userController.updateUser);
+router.put('/:id', userController.updateUser);
 
 /**
  * @swagger
@@ -178,6 +179,6 @@ router.put("/:id", userController.updateUser);
  *       404:
  *         description: Usuário não encontrado
  */
-router.delete("/:id", userController.deleteUser);
+router.delete('/:id', userController.deleteUser);
 
 export default router;
