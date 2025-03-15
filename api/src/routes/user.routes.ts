@@ -45,7 +45,7 @@ const userController = new UserController();
  *       400:
  *         description: Erro na requisição
  */
-router.post('/', userController.createUser);
+router.post('/', authenticateToken, userController.createUser);
 
 /**
  * @swagger
@@ -76,7 +76,12 @@ router.post('/', userController.createUser);
  *                     type: string
  *                     example: "PROFESSOR"
  */
-router.get('/', authenticateToken, userController.getAllUsers);
+router.get(
+    '/',
+    authenticateToken,
+    authenticateToken,
+    userController.getAllUsers
+);
 
 /**
  * @swagger
@@ -114,7 +119,7 @@ router.get('/', authenticateToken, userController.getAllUsers);
  *       404:
  *         description: Usuário não encontrado
  */
-router.get('/:id', userController.getUserById);
+router.get('/:id', authenticateToken, userController.getUserById);
 
 /**
  * @swagger
@@ -158,7 +163,7 @@ router.get('/:id', userController.getUserById);
  *       404:
  *         description: Usuário não encontrado
  */
-router.put('/:id', userController.updateUser);
+router.put('/:id', authenticateToken, userController.updateUser);
 
 /**
  * @swagger
@@ -179,6 +184,6 @@ router.put('/:id', userController.updateUser);
  *       404:
  *         description: Usuário não encontrado
  */
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', authenticateToken, userController.deleteUser);
 
 export default router;
