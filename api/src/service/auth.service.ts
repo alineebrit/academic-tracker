@@ -1,17 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 
-dotenv.config(); // Carrega as variáveis de ambiente
-
-const SECRET_KEY = process.env.JWT_SECRET || 'sua_chave_secreta';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const EXPIRES_IN: any = process.env.JWT_EXPIRES_IN || '1h';
+dotenv.config();
 
 export class AuthService {
-    generateToken = (user: { id: number; email: string }): string => {
-        return jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
-            expiresIn: EXPIRES_IN,
+    SECRET_KEY = process.env.JWT_SECRET || 'sua_chave_secreta';
+    EXPIRES_IN: any = process.env.JWT_EXPIRES_IN || '1h';
+
+    constructor() {}
+
+    generateToken = (id: number): string => {
+        return jwt.sign({ id }, this.SECRET_KEY, {
+            expiresIn: this.EXPIRES_IN,
         });
     };
 
