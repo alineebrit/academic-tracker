@@ -1,6 +1,5 @@
-import { User } from "@prisma/client";
-import { UserRepository } from "../repositories/user.repository";
-
+import { User } from '../models/user';
+import { UserRepository } from '../repositories/user.repository';
 export class UserService {
     private readonly userRepository: UserRepository;
 
@@ -9,8 +8,9 @@ export class UserService {
     }
 
     createUser = async (data: User) => {
-        if (await this.verifyUniqueUser(data.email)) {
-            throw new Error("O email já está cadastrado.");
+        const userExists = await this.verifyUniqueUser(data.email);
+        if (userExists) {
+            throw new Error('O email já está cadastrado.');
         }
         return await this.userRepository.createUser(data);
     };
