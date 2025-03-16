@@ -1,11 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import dotenv from 'dotenv';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { UserService } from '../service/user.service';
 
 dotenv.config();
 
-export const authenticateToken = (
+const userService = new UserService();
+
+export const authenticateToken = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -20,10 +22,24 @@ export const authenticateToken = (
     const token = authHeader.split(' ')[1];
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-        req.user = decoded;
+        //
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET as string
+        ) as jwt.JwtPayload;
+
+        const user = await userService.getUserById(decoded.id);
+
+        if (!user) {
+            res.status(404).json({ message: 'Usuário não encontrado' });
+            return;
+        }
+
+        req.user = user;
+
         next();
     } catch (error) {
+        console.error(error);
         res.status(401).json({ message: 'Token inválido' });
         return;
     }

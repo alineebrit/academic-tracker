@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { TurmaController } from '../controllers/turma.controller';
 import { authenticateToken } from '../middlewares/auth.middlewares';
+import { validateRole } from '../middlewares/roles.middlewares';
 
 const router = Router();
 const turmaController = new TurmaController();
@@ -37,7 +38,12 @@ const turmaController = new TurmaController();
  *       400:
  *         description: Erro na requisição
  */
-router.post('/', authenticateToken, turmaController.createTurma);
+router.post(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    turmaController.createTurma
+);
 
 /**
  * @swagger
@@ -65,7 +71,12 @@ router.post('/', authenticateToken, turmaController.createTurma);
  *                     type: integer
  *                     example: 1
  */
-router.get('/', authenticateToken, turmaController.getAllTurmas);
+router.get(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    turmaController.getAllTurmas
+);
 
 /**
  * @swagger
@@ -100,7 +111,12 @@ router.get('/', authenticateToken, turmaController.getAllTurmas);
  *       404:
  *         description: Turma não encontrada
  */
-router.get('/:id', authenticateToken, turmaController.getTurmaById);
+router.get(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    turmaController.getTurmaById
+);
 
 /**
  * @swagger
@@ -136,7 +152,12 @@ router.get('/:id', authenticateToken, turmaController.getTurmaById);
  *       404:
  *         description: Turma não encontrada
  */
-router.put('/:id', authenticateToken, turmaController.updateTurma);
+router.put(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    turmaController.updateTurma
+);
 
 /**
  * @swagger
@@ -157,6 +178,11 @@ router.put('/:id', authenticateToken, turmaController.updateTurma);
  *       404:
  *         description: Turma não encontrada
  */
-router.delete('/:id', authenticateToken, turmaController.deleteTurma);
+router.delete(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    turmaController.deleteTurma
+);
 
 export default router;

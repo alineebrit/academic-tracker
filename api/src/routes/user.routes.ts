@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller';
 import { authenticateToken } from '../middlewares/auth.middlewares';
+import { validateRole } from '../middlewares/roles.middlewares';
 
 const router = Router();
 const userController = new UserController();
@@ -79,7 +80,7 @@ router.post('/', authenticateToken, userController.createUser);
 router.get(
     '/',
     authenticateToken,
-    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
     userController.getAllUsers
 );
 
@@ -119,7 +120,12 @@ router.get(
  *       404:
  *         description: Usuário não encontrado
  */
-router.get('/:id', authenticateToken, userController.getUserById);
+router.get(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    userController.getUserById
+);
 
 /**
  * @swagger
@@ -163,7 +169,12 @@ router.get('/:id', authenticateToken, userController.getUserById);
  *       404:
  *         description: Usuário não encontrado
  */
-router.put('/:id', authenticateToken, userController.updateUser);
+router.put(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN']),
+    userController.updateUser
+);
 
 /**
  * @swagger
@@ -184,6 +195,11 @@ router.put('/:id', authenticateToken, userController.updateUser);
  *       404:
  *         description: Usuário não encontrado
  */
-router.delete('/:id', authenticateToken, userController.deleteUser);
+router.delete(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN']),
+    userController.deleteUser
+);
 
 export default router;

@@ -1,6 +1,7 @@
 import { authenticateToken } from './../middlewares/auth.middlewares';
 import { Router } from 'express';
 import { AtividadeController } from '../controllers/atividades.controller';
+import { validateRole } from '../middlewares/roles.middlewares';
 
 const router = Router();
 const atividadeController = new AtividadeController();
@@ -37,7 +38,12 @@ const atividadeController = new AtividadeController();
  *       400:
  *         description: Erro na requisição
  */
-router.post('/', authenticateToken, atividadeController.createAtividade);
+router.post(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    atividadeController.createAtividade
+);
 
 /**
  * @swagger
@@ -65,7 +71,12 @@ router.post('/', authenticateToken, atividadeController.createAtividade);
  *                     type: string
  *                     example: "Pesquisa sobre meio ambiente"
  */
-router.get('/', authenticateToken, atividadeController.getAllAtividades);
+router.get(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    atividadeController.getAllAtividades
+);
 
 /**
  * @swagger
@@ -100,7 +111,12 @@ router.get('/', authenticateToken, atividadeController.getAllAtividades);
  *       404:
  *         description: Atividade não encontrada
  */
-router.get('/:id', authenticateToken, atividadeController.getAtividadeById);
+router.get(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    atividadeController.getAtividadeById
+);
 
 /**
  * @swagger
@@ -136,7 +152,12 @@ router.get('/:id', authenticateToken, atividadeController.getAtividadeById);
  *       404:
  *         description: Atividade não encontrada
  */
-router.put('/:id', authenticateToken, atividadeController.updateAtividade);
+router.put(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    atividadeController.updateAtividade
+);
 
 /**
  * @swagger
@@ -157,6 +178,11 @@ router.put('/:id', authenticateToken, atividadeController.updateAtividade);
  *       404:
  *         description: Atividade não encontrada
  */
-router.delete('/:id', authenticateToken, atividadeController.deleteAtividade);
+router.delete(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    atividadeController.deleteAtividade
+);
 
 export default router;

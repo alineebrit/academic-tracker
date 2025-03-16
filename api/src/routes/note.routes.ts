@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { NoteController } from '../controllers/note.controller';
 import { authenticateToken } from '../middlewares/auth.middlewares';
+import { validateRole } from '../middlewares/roles.middlewares';
 
 const router = Router();
 const noteController = new NoteController();
@@ -40,7 +41,12 @@ const noteController = new NoteController();
  *       400:
  *         description: Erro na requisição
  */
-router.post('/', authenticateToken, noteController.createNote);
+router.post(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    noteController.createNote
+);
 
 /**
  * @swagger
@@ -71,7 +77,12 @@ router.post('/', authenticateToken, noteController.createNote);
  *                     type: integer
  *                     example: 2
  */
-router.get('/', authenticateToken, noteController.getAllNotes);
+router.get(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    noteController.getAllNotes
+);
 
 /**
  * @swagger
@@ -109,7 +120,12 @@ router.get('/', authenticateToken, noteController.getAllNotes);
  *       404:
  *         description: Nota não encontrada
  */
-router.get('/:id', authenticateToken, noteController.getNoteById);
+router.get(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    noteController.getNoteById
+);
 
 /**
  * @swagger
@@ -148,7 +164,12 @@ router.get('/:id', authenticateToken, noteController.getNoteById);
  *       404:
  *         description: Nota não encontrada
  */
-router.put('/:id', authenticateToken, noteController.updateNote);
+router.put(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    noteController.updateNote
+);
 
 /**
  * @swagger
@@ -169,6 +190,11 @@ router.put('/:id', authenticateToken, noteController.updateNote);
  *       404:
  *         description: Nota não encontrada
  */
-router.delete('/:id', authenticateToken, noteController.deleteNote);
+router.delete(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    noteController.deleteNote
+);
 
 export default router;
