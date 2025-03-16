@@ -1,4 +1,5 @@
-import { $Enums, PrismaClient, User } from "@prisma/client";
+import { $Enums, PrismaClient } from '@prisma/client';
+import { User } from '../models/user';
 
 export class UserRepository {
     userClient = new PrismaClient().user;
@@ -35,6 +36,10 @@ export class UserRepository {
 
     deleteUser = async (id: number) => {
         return await this.userClient.delete({ where: { id } });
+    };
+
+    findUnique = async (email: string) => {
+        return await this.userClient.findUnique({ where: { email } });
     };
 }
 

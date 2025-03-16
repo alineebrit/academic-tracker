@@ -1,5 +1,7 @@
-import { Router } from "express";
-import { GrupoController } from "../controllers/grupo.controller";
+import { Router } from 'express';
+import { GrupoController } from '../controllers/grupo.controller';
+import { authenticateToken } from '../middlewares/auth.middlewares';
+import { validateRole } from '../middlewares/roles.middlewares';
 
 const router = Router();
 const grupoController = new GrupoController();
@@ -36,7 +38,12 @@ const grupoController = new GrupoController();
  *       400:
  *         description: Erro na requisição
  */
-router.post("/", grupoController.createGrupo);
+router.post(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    grupoController.createGrupo
+);
 
 /**
  * @swagger
@@ -64,7 +71,12 @@ router.post("/", grupoController.createGrupo);
  *                     type: integer
  *                     example: 1
  */
-router.get("/", grupoController.getAllGrupos);
+router.get(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    grupoController.getAllGrupos
+);
 
 /**
  * @swagger
@@ -99,7 +111,12 @@ router.get("/", grupoController.getAllGrupos);
  *       404:
  *         description: Grupo não encontrado
  */
-router.get("/:id", grupoController.getGrupoById);
+router.get(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    grupoController.getGrupoById
+);
 
 /**
  * @swagger
@@ -135,7 +152,12 @@ router.get("/:id", grupoController.getGrupoById);
  *       404:
  *         description: Grupo não encontrado
  */
-router.put("/:id", grupoController.updateGrupo);
+router.put(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    grupoController.updateGrupo
+);
 
 /**
  * @swagger
@@ -156,6 +178,11 @@ router.put("/:id", grupoController.updateGrupo);
  *       404:
  *         description: Grupo não encontrado
  */
-router.delete("/:id", grupoController.deleteGrupo);
+router.delete(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    grupoController.deleteGrupo
+);
 
 export default router;

@@ -1,6 +1,6 @@
-import { User } from "@prisma/client";
-import { UserRepository } from "../repositories/user.repository";
-
+import { $Enums } from '@prisma/client';
+import { User } from '../models/user';
+import { UserRepository } from '../repositories/user.repository';
 export class UserService {
     private readonly userRepository: UserRepository;
 
@@ -9,8 +9,9 @@ export class UserService {
     }
 
     createUser = async (data: User) => {
-        if (await this.verifyUniqueUser(data.email)) {
-            throw new Error("O email já está cadastrado.");
+        const userExists = await this.verifyUniqueUser(data.email);
+        if (userExists) {
+            throw new Error('O email já está cadastrado.');
         }
         return await this.userRepository.createUser(data);
     };
@@ -35,6 +36,19 @@ export class UserService {
         return await this.userRepository
             .countByEmail(email)
             .then((e) => e >= 1);
+    };
+
+    isAdminOrProfessor = async (userId: number): Promise<boolean> => {
+        const user = await this.getUserById(userId);
+
+        if (!user) return false;
+
+        const allowedRoles: $Enums.UserRole[] = [
+            $Enums.UserRole.ADMIN,
+            $Enums.UserRole.PROFESSOR,
+        ];
+
+        return allowedRoles.includes(user.role);
     };
 
     // async verificarPermissao(userId: number, requiredRole: string) {
