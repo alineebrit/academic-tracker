@@ -58,18 +58,18 @@ model Note {
 }
 
 model Atividade {
-  id          Int       @id @default(autoincrement())
+  id          Int              @id @default(autoincrement())
   title       String
   description String?
   dueDate     DateTime?
-  // status atividadeStatus
+  status      atividadeStatus?
   grupoId     Int?
-  grupo       Grupo?    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  grupo       Grupo?           @relation(fields: [grupoId], references: [id], onDelete: Cascade)
 }
 
-// enum atividadeStatus {
-//   NAO_INICIADA
-//   EM_PROCESSO
-//   AGUARDANDO_CORRECAO
-//   FINALIZADA
-// }
+enum atividadeStatus {
+  NAO_INICIADA
+  EM_PROCESSO
+  AGUARDANDO_CORRECAO
+  FINALIZADA
+}
