@@ -172,7 +172,7 @@ router.get(
 router.put(
     '/:id',
     authenticateToken,
-    validateRole(['ADMIN']),
+    validateRole(['ADMIN', 'ALUNO', 'PROFESSOR']),
     userController.updateUser
 );
 
