@@ -4,12 +4,13 @@
     "description": "https://github.com/joseglauberbo/ProgWeb24.2",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "mocha --require ts-node/register src/tests/**/*.test.ts --timeout 10000",
         "start": "node server.js",
         "start:dev": "nodemon --watch 'src/' --exec 'ts-node src/server.ts' -e ts",
         "migrate": "prisma migrate dev",
         "build": "tsc",
-        "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts"
+        "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
+        "coverage": "nyc npm test"
     },
     "keywords": [],
     "author": "",
@@ -28,19 +29,34 @@
     "devDependencies": {
         "@eslint/js": "^9.18.0",
         "@types/bcryptjs": "^2.4.6",
+        "@types/chai": "^5.2.0",
+        "@types/chai-http": "^3.0.5",
         "@types/express": "^5.0.0",
         "@types/jsonwebtoken": "^9.0.9",
+        "@types/mocha": "^10.0.10",
         "@types/node": "^22.10.6",
+        "@types/supertest": "^6.0.2",
         "@types/swagger-jsdoc": "^6.0.4",
         "@types/swagger-ui-express": "^4.1.7",
+        "chai": "^5.2.0",
+        "chai-http": "^5.1.1",
         "eslint": "^9.18.0",
         "eslint-config-prettier": "^10.0.1",
+        "esm": "^3.2.25",
         "globals": "^15.14.0",
+        "mocha": "^11.1.0",
         "nodemon": "^3.1.9",
+        "nyc": "^17.1.0",
         "prettier": "^3.4.2",
         "prisma": "^6.5.0",
+        "supertest": "^7.0.0",
         "ts-node": "^10.9.2",
         "typescript": "^5.7.3",
         "typescript-eslint": "^8.20.0"
+    },
+    "mocha": {
+        "require": "ts-node/register",
+        "recursive": true,
+        "timeout": 5000
     }
 }
