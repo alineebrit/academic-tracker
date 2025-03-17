@@ -41,7 +41,7 @@ const grupoController = new GrupoController();
 router.post(
     '/',
     authenticateToken,
-    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    validateRole(['ADMIN', 'PROFESSOR']),
     grupoController.createGrupo
 );
 

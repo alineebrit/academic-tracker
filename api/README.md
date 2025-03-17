@@ -72,55 +72,55 @@ schema.prisma
 
 ### Atividades
 
-- [POST] /atividades
-- [GET] /atividades
-- [GET] /atividades/{id}
-- [PUT] /atividades/{id}
-- [DELETE] /atividades/{id}
+- [POST] /atividades AUTORIZAÇÃO: ['ADMIN', 'PROFESSOR']
+- [GET] /atividades AUTORIZAÇÃO: TODOS
+- [GET] /atividades/{id} AUTORIZAÇÃO: TODOS
+- [PUT] /atividades/{id} AUTORIZAÇÃO: ['ADMIN', 'PROFESSOR']
+- [DELETE] /atividades/{id} AUTORIZAÇÃO: ['ADMIN', 'PROFESSOR']
 
 ### Grupos
 
-- [POST] /grupo
+- [POST] /grupo ['ADMIN', 'PROFESSOR', 'ALUNO']
   Body:
   {
   "name": "grupoteste",
   "turmaId": 2
   }
-- [GET] /grupo
-- [GET] /grupo/{id}
-- [PUT] /grupo/{id}
-- [DELETE] /grupo/{id}
+- [GET] /grupo ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [GET] /grupo/{id} ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [PUT] /grupo/{id} ['ADMIN', 'PROFESSOR']
+- [DELETE] /grupo/{id} ['ADMIN', 'PROFESSOR']
 
 ### Notes
 
-- [POST] /notes
+- [POST] /notes ['ADMIN', 'PROFESSOR']
   Body:
   {
   "title": "nota do grupo aline e luis",
   "content": "os alunos seguiram os requisitos esperados",
   "grupoId": 2
   }
-- [GET] /notes
-- [GET] /notes/{id}
-- [PUT] /notes/{id}
-- [DELETE] /notes/{id}
+- [GET] /notes ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [GET] /notes/{id} ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [PUT] /notes/{id} ['ADMIN', 'PROFESSOR']
+- [DELETE] /notes/{id} ['ADMIN', 'PROFESSOR']
 
 ### Turmas
 
-- [POST] /turma
+- [POST] /turma ['ADMIN', 'PROFESSOR']
   Body:
   {
   "name": "luis teste",
   "userId": 1
   }
-- [GET] /turma
-- [GET] /turma/{id}
-- [PUT] /turma/{id}
-- [DELETE] /turma/{id}
+- [GET] /turma ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [GET] /turma/{id} ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [PUT] /turma/{id} ['ADMIN', 'PROFESSOR']
+- [DELETE] /turma/{id} ['ADMIN', 'PROFESSOR']
 
 ### Usuários
 
-- [POST] /user
+- [POST] /user ['ADMIN', 'PROFESSOR', 'ALUNO']
   Body:
   {
   "name": "luis teste",
@@ -128,10 +128,10 @@ schema.prisma
   "password": "12314",
   "role": "ALUNO"
   }
-- [GET] /user
-- [GET] /user/{id}
-- [PUT] /user/{id}
-- [DELETE] /user/{id}
+- [GET] /user ['ADMIN', 'PROFESSOR']
+- [GET] /user/{id} ['ADMIN', 'PROFESSOR']
+- [PUT] /user/{id} ['ADMIN', 'ALUNO', 'PROFESSOR']
+- [DELETE] /user/{id} ['ADMIN']
 
 ### Autenticação
 
