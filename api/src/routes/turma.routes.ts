@@ -1,5 +1,7 @@
-import { Router } from "express";
-import { TurmaController } from "../controllers/turma.controller";
+import { Router } from 'express';
+import { TurmaController } from '../controllers/turma.controller';
+import { authenticateToken } from '../middlewares/auth.middlewares';
+import { validateRole } from '../middlewares/roles.middlewares';
 
 const router = Router();
 const turmaController = new TurmaController();
@@ -24,19 +26,24 @@ const turmaController = new TurmaController();
  *           schema:
  *             type: object
  *             properties:
- *               nome:
+ *               name:
  *                 type: string
- *                 example: "Turma A"
- *               descricao:
- *                 type: string
- *                 example: "Turma do 5º ano - Matemática"
+ *                 example: "turmateste"
+ *               userId:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       201:
  *         description: Turma criada com sucesso
  *       400:
  *         description: Erro na requisição
  */
-router.post("/", turmaController.createTurma);
+router.post(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    turmaController.createTurma
+);
 
 /**
  * @swagger
@@ -57,14 +64,19 @@ router.post("/", turmaController.createTurma);
  *                   id:
  *                     type: integer
  *                     example: 1
- *                   nome:
+ *                   name:
  *                     type: string
  *                     example: "Turma A"
- *                   descricao:
- *                     type: string
- *                     example: "Turma do 5º ano - Matemática"
+ *                   userId:
+ *                     type: integer
+ *                     example: 1
  */
-router.get("/", turmaController.getAllTurmas);
+router.get(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    turmaController.getAllTurmas
+);
 
 /**
  * @swagger
@@ -90,16 +102,21 @@ router.get("/", turmaController.getAllTurmas);
  *                 id:
  *                   type: integer
  *                   example: 1
- *                 nome:
+ *                 name:
  *                   type: string
  *                   example: "Turma A"
- *                 descricao:
- *                   type: string
- *                   example: "Turma do 5º ano - Matemática"
+ *                 userId:
+ *                   type: integer
+ *                   example: 1
  *       404:
  *         description: Turma não encontrada
  */
-router.get("/:id", turmaController.getTurmaById);
+router.get(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    turmaController.getTurmaById
+);
 
 /**
  * @swagger
@@ -121,12 +138,12 @@ router.get("/:id", turmaController.getTurmaById);
  *           schema:
  *             type: object
  *             properties:
- *               nome:
+ *               name:
  *                 type: string
  *                 example: "Turma B"
- *               descricao:
- *                 type: string
- *                 example: "Turma de reforço em Matemática"
+ *               userId:
+ *                 type: integer
+ *                 example: 2
  *     responses:
  *       200:
  *         description: Turma atualizada com sucesso
@@ -135,7 +152,12 @@ router.get("/:id", turmaController.getTurmaById);
  *       404:
  *         description: Turma não encontrada
  */
-router.put("/:id", turmaController.updateTurma);
+router.put(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    turmaController.updateTurma
+);
 
 /**
  * @swagger
@@ -156,6 +178,11 @@ router.put("/:id", turmaController.updateTurma);
  *       404:
  *         description: Turma não encontrada
  */
-router.delete("/:id", turmaController.deleteTurma);
+router.delete(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    turmaController.deleteTurma
+);
 
 export default router;

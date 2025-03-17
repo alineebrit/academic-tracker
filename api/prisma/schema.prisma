@@ -12,16 +12,16 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
   role      UserRole
   turmas    Turma[]
   grupoId   Int?
-  grupo     Grupo?   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  grupo     Grupo?    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 enum UserRole {
@@ -58,10 +58,18 @@ model Note {
 }
 
 model Atividade {
-  id          Int       @id @default(autoincrement())
+  id          Int              @id @default(autoincrement())
   title       String
   description String?
   dueDate     DateTime?
+  status      atividadeStatus?
   grupoId     Int?
-  grupo       Grupo?    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  grupo       Grupo?           @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+}
+
+enum atividadeStatus {
+  NAO_INICIADA
+  EM_PROCESSO
+  AGUARDANDO_CORRECAO
+  FINALIZADA
 }

@@ -24,10 +24,12 @@ export class AtividadeController {
             const atividade =
                 await this.atividadeService.createAtividade(atividadeData);
             res.status(201).json({ data: atividade });
+            return;
         } catch (error) {
             res.status(500).json({
                 error: "Não foi possível criar a atividade",
             });
+            return;
         }
     };
 
@@ -42,10 +44,12 @@ export class AtividadeController {
                 atividadeData
             );
             res.status(200).json({ data: atividade });
+            return;
         } catch (error) {
             res.status(500).json({
                 error: "Não foi possível atualizar a atividade",
             });
+            return;
         }
     };
 
@@ -54,10 +58,12 @@ export class AtividadeController {
             const getAll = await this.atividadeService.getAllAtividade();
 
             res.status(200).json({ data: getAll });
+            return;
         } catch (error) {
             res.status(500).json({
                 error: "Error ao utilizar o getAllAtividades",
             });
+            return;
         }
     };
 
@@ -68,10 +74,12 @@ export class AtividadeController {
                 await this.atividadeService.getAtividadeById(atividadeId);
 
             res.status(200).json({ data: atividade });
+            return;
         } catch (err) {
             res.status(500).json({
                 error: `Não foi possível encontrar a atividade de id ${req.params.id}`,
             });
+            return;
         }
     };
     deleteAtividade = async (req: Request, res: Response) => {
@@ -81,10 +89,12 @@ export class AtividadeController {
                 await this.atividadeService.deleteAtividade(atividadeId);
 
             res.status(204).json({ data: atividade });
+            return;
         } catch (err) {
             res.status(500).json({
                 error: `Não foi possível encontrar a atividade de id ${req.params.id}`,
             });
+            return;
         }
     };
 }

@@ -4,68 +4,137 @@ https://github.com/joseglauberbo/ProgWeb24.2
 
 ## Academic Tracker
 
-O academic Tracker é uma aplicação web focada no gestão e acompanhamento de atividades dos alunos pelo professor.
-Será possível cadastrar um professor e esse professor terá uma turma, que por sua vez terão Grupos
-Os grupos serão compostos de alunos e os grupos também irão guardar um grupo de Cards que serão relacionados aos acompanhamentos.
+O academic Tracker é uma Aplicação web focada no gestão e acompanhamento de atividades dos alunos pelo professor.
 
-As tecnologias utilizadas serão Typescript com React para o front-end e para o backend Nodejs com express.
+## Tecnologias Utilizadas
 
-Os usuários podem ser cadastrados a partir de NOME e TIPO;
-Os usuários podem ser do tipo "PROFESSOR" ou do tipo "ALUNO";
-O professor contém TURMAS
-Turmas contém GRUPOS (Além de outras descrições)
-Os GRUPOS são compostos por ALUNOS
-Os GRUPOS também contém NOTAS que são referentes aos acompanhamentos.
+### Frontend
 
-Exemplos de rotas que serão desenvolvidas:
-1 - Criar turma:
-• POST /api/turmas
-• Descrição: Cria uma nova turma vinculada a um professor.
-• Body: { "nome": "string", "descricao": "string", "professorId": "string" }
-2 - Listar turmas:
-• GET /api/turmas
-• Descrição: Retorna todas as turmas cadastradas
+- React
+- Typescript
 
---
-user
+### Backend
 
-    id (PK)
-    name
-    email (unique)
-    password
-    role (enum: ADMIN, PROFESSOR, ALUNO)
-    created_at
-    updated_at
+- Nodejs
+- Express
+- JWT
 
-classe (TURMAS)
+### Banco de dados
 
-    id (PK)
-    name
-    professor_id (FK -> users.id, only PROFESSOR)
-    created_at
-    updated_at
+- Supabase
+- Prisma (ORM)
+- PostgreSQL
 
-group (GRUPOS)
+## Rotas importantes
 
-    id (PK)
-    name
-    class_id (FK -> classes.id)
-    created_at
-    updated_at
+- http://localhost:3000/ (rota padrão para o servidor)
+- http://localhost:3000/api-docs (swagger-api)
 
-group_members (associação entre alunos e grupos)
+## Principais Features do Sistema
 
-    id (PK)
-    group_id (FK -> groups.id)
-    student_id (FK -> users.id, only ALUNO)
-    joined_at
+### Usuários
 
-cards
+- Os usuários podem ser cadastrados a partir de NOME, EMAIL, PASSWORD e ROLE
+- Os usuários podem se autenticar a partir da rota /auth/login a partir do seu EMAIL e SENHA
+- Os usuários podem ser do tipo "PROFESSOR", "ALUNO" ou ADMIN;
+- Usuários do tipo PROFESSOR irão conter TURMAS que só podem ser cadastradas por ele
+- Usuários do tipo ALUNO terão grupos que terão que ser cadastrados pelos PROFESSORES
 
-    id (PK)
-    title
-    description
-    created_at
-    updated_at
-    group_id (FK -> groups.id)
-    professor_id (FK -> users.id, only PROFESSOR)
+### Turmas
+
+- Turmas devem ser criadas por professores
+- Turmas contém grupos que também devem ser criadas pelos professores
+- A turma é criada a partir, minimamente, de um nome e um userId
+
+### Grupos
+
+- Grupos devem ser criados pelos professores, recebendo apenas obrigatoriamente nome e id do usuário do tipo PROFESSOR
+- Grupos contém também Notes que são basicamente Notas ou Feedbacks dados aos alunos para que eles possam atualizar mais sobre a entrega.
+
+### Note
+
+- Notes contém um título, um conteúdo e também o grupoId o qual essa note deve ser associada.
+
+### Atividade
+
+- A atividade contém um título podendo conter também um grupoId associado, além da descrição e dueDate;
+
+## Estrutura do Banco de dados
+
+Para entender como está estruturado o banco de dados basta acessar:
+
+```
+cd prisma
+schema.prisma
+```
+
+## Rotas
+
+### Atividades
+
+- [POST] /atividades AUTORIZAÇÃO: ['ADMIN', 'PROFESSOR']
+- [GET] /atividades AUTORIZAÇÃO: TODOS
+- [GET] /atividades/{id} AUTORIZAÇÃO: TODOS
+- [PUT] /atividades/{id} AUTORIZAÇÃO: ['ADMIN', 'PROFESSOR']
+- [DELETE] /atividades/{id} AUTORIZAÇÃO: ['ADMIN', 'PROFESSOR']
+
+### Grupos
+
+- [POST] /grupo ['ADMIN', 'PROFESSOR', 'ALUNO']
+  Body:
+  {
+  "name": "grupoteste",
+  "turmaId": 2
+  }
+- [GET] /grupo ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [GET] /grupo/{id} ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [PUT] /grupo/{id} ['ADMIN', 'PROFESSOR']
+- [DELETE] /grupo/{id} ['ADMIN', 'PROFESSOR']
+
+### Notes
+
+- [POST] /notes ['ADMIN', 'PROFESSOR']
+  Body:
+  {
+  "title": "nota do grupo aline e luis",
+  "content": "os alunos seguiram os requisitos esperados",
+  "grupoId": 2
+  }
+- [GET] /notes ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [GET] /notes/{id} ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [PUT] /notes/{id} ['ADMIN', 'PROFESSOR']
+- [DELETE] /notes/{id} ['ADMIN', 'PROFESSOR']
+
+### Turmas
+
+- [POST] /turma ['ADMIN', 'PROFESSOR']
+  Body:
+  {
+  "name": "luis teste",
+  "userId": 1
+  }
+- [GET] /turma ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [GET] /turma/{id} ['ADMIN', 'PROFESSOR', 'ALUNO']
+- [PUT] /turma/{id} ['ADMIN', 'PROFESSOR']
+- [DELETE] /turma/{id} ['ADMIN', 'PROFESSOR']
+
+### Usuários
+
+- [POST] /user ['ADMIN', 'PROFESSOR', 'ALUNO']
+  Body:
+  {
+  "name": "luis teste",
+  "email": "luis55@email.com",
+  "password": "12314",
+  "role": "ALUNO"
+  }
+- [GET] /user ['ADMIN', 'PROFESSOR']
+- [GET] /user/{id} ['ADMIN', 'PROFESSOR']
+- [PUT] /user/{id} ['ADMIN', 'ALUNO', 'PROFESSOR']
+- [DELETE] /user/{id} ['ADMIN']
+
+### Autenticação
+
+- /auth/login
+
+Adicionar no Header da Request: [KEY] Authorization [VALUE] Bearer SUA_CHAVE

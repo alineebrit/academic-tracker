@@ -1,5 +1,7 @@
-import { Router } from "express";
-import { AtividadeController } from "../controllers/atividades.controller";
+import { authenticateToken } from './../middlewares/auth.middlewares';
+import { Router } from 'express';
+import { AtividadeController } from '../controllers/atividades.controller';
+import { validateRole } from '../middlewares/roles.middlewares';
 
 const router = Router();
 const atividadeController = new AtividadeController();
@@ -24,23 +26,24 @@ const atividadeController = new AtividadeController();
  *           schema:
  *             type: object
  *             properties:
- *               titulo:
+ *               title:
  *                 type: string
  *                 example: "Atividade de Matemática"
- *               descricao:
+ *               description:
  *                 type: string
  *                 example: "Resolver 10 exercícios sobre equações"
- *               dataEntrega:
- *                 type: string
- *                 format: date
- *                 example: "2025-02-20"
  *     responses:
  *       201:
  *         description: Atividade criada com sucesso
  *       400:
  *         description: Erro na requisição
  */
-router.post("/", atividadeController.createAtividade);
+router.post(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    atividadeController.createAtividade
+);
 
 /**
  * @swagger
@@ -61,18 +64,19 @@ router.post("/", atividadeController.createAtividade);
  *                   id:
  *                     type: integer
  *                     example: 1
- *                   titulo:
+ *                   title:
  *                     type: string
  *                     example: "Atividade de Ciências"
- *                   descricao:
+ *                   description:
  *                     type: string
  *                     example: "Pesquisa sobre meio ambiente"
- *                   dataEntrega:
- *                     type: string
- *                     format: date
- *                     example: "2025-03-10"
  */
-router.get("/", atividadeController.getAllAtividades);
+router.get(
+    '/',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    atividadeController.getAllAtividades
+);
 
 /**
  * @swagger
@@ -98,20 +102,21 @@ router.get("/", atividadeController.getAllAtividades);
  *                 id:
  *                   type: integer
  *                   example: 1
- *                 titulo:
+ *                 title:
  *                   type: string
  *                   example: "Atividade de História"
- *                 descricao:
+ *                 description:
  *                   type: string
  *                   example: "Linha do tempo da Revolução Francesa"
- *                 dataEntrega:
- *                   type: string
- *                   format: date
- *                   example: "2025-04-05"
  *       404:
  *         description: Atividade não encontrada
  */
-router.get("/:id", atividadeController.getAtividadeById);
+router.get(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    atividadeController.getAtividadeById
+);
 
 /**
  * @swagger
@@ -133,16 +138,12 @@ router.get("/:id", atividadeController.getAtividadeById);
  *           schema:
  *             type: object
  *             properties:
- *               titulo:
+ *               title:
  *                 type: string
  *                 example: "Atividade de Inglês"
- *               descricao:
+ *               description:
  *                 type: string
  *                 example: "Tradução de um texto"
- *               dataEntrega:
- *                 type: string
- *                 format: date
- *                 example: "2025-02-25"
  *     responses:
  *       200:
  *         description: Atividade atualizada com sucesso
@@ -151,7 +152,12 @@ router.get("/:id", atividadeController.getAtividadeById);
  *       404:
  *         description: Atividade não encontrada
  */
-router.put("/:id", atividadeController.updateAtividade);
+router.put(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    atividadeController.updateAtividade
+);
 
 /**
  * @swagger
@@ -172,6 +178,11 @@ router.put("/:id", atividadeController.updateAtividade);
  *       404:
  *         description: Atividade não encontrada
  */
-router.delete("/:id", atividadeController.deleteAtividade);
+router.delete(
+    '/:id',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR']),
+    atividadeController.deleteAtividade
+);
 
 export default router;
