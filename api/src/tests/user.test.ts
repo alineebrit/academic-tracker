@@ -5,11 +5,11 @@ import app from '../server'; // Certifique-se de exportar corretamente o app
 const { expect } = chai;
 
 describe('Testes da API de Usuários', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let userId: number;
     let authToken: string;
+    const uniqueEmail = `user_${Date.now()}@example.com`;
 
-    /** 📌 Antes de rodar os testes, criar e autenticar o usuário */
+    /** 📌 Antes de rodar os testes, autentica o admin e cria um usuário para os testes */
     before(async () => {
         const authRes = await request(app).post('/auth/login').send({
             email: 'admin@admin.com',
@@ -17,33 +17,41 @@ describe('Testes da API de Usuários', () => {
         });
 
         console.log('Resposta do login:', authRes.body); // Debugando a resposta
-
         authToken = authRes.body.token;
+        expect(authToken).to.be.a('string');
 
-        expect(authToken).to.be.a('string'); // Verifica se authToken é uma string válida
+        const userRes = await request(app)
+            .post('/user')
+            .set('Authorization', `Bearer ${authToken}`)
+            .send({
+                email: uniqueEmail,
+                name: 'User Test',
+                password: 'senhaSegura123',
+                role: 'ADMIN',
+            });
+
+        expect(userRes.status).to.equal(201);
+        expect(userRes.body).to.have.property('data');
+        userId = userRes.body.data.id;
     });
 
     /** 📌 1. Criar um novo usuário */
-    describe('Testes da API de Usuários', () => {
-        const uniqueEmail = `user_${Date.now()}@example.com`;
+    it('✅ Deve criar um novo usuário', async () => {
+        const newUserEmail = `user_${Date.now()}@example.com`;
 
-        it('✅ Deve criar um novo usuário', async () => {
-            const res = await request(app)
-                .post('/user')
-                .set('Authorization', `Bearer ${authToken}`)
-                .send({
-                    email: uniqueEmail,
-                    name: 'User Test',
-                    password: 'senhaSegura123',
-                    role: 'ADMIN',
-                });
+        const res = await request(app)
+            .post('/user')
+            .set('Authorization', `Bearer ${authToken}`)
+            .send({
+                email: newUserEmail,
+                name: 'User Test',
+                password: 'senhaSegura123',
+                role: 'ADMIN',
+            });
 
-            expect(res.status).to.equal(201);
-            expect(res.body).to.have.property('data');
-            expect(res.body.data).to.have.property('id');
-
-            userId = res.body.data.id;
-        });
+        expect(res.status).to.equal(201);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('id');
     });
 
     /** 📌 2. Erro ao criar usuário sem email */
@@ -70,7 +78,7 @@ describe('Testes da API de Usuários', () => {
             .post('/user')
             .set('Authorization', `Bearer ${authToken}`)
             .send({
-                email: 'user@example.com',
+                email: `invalid_role_${Date.now()}@example.com`,
                 name: 'User Test',
                 password: 'senhaSegura123',
                 role: 'INVALID_ROLE',
@@ -97,11 +105,11 @@ describe('Testes da API de Usuários', () => {
     /** 📌 5. Buscar um usuário pelo ID */
     it('✅ Deve buscar um usuário pelo ID', async () => {
         const res = await request(app)
-            .get(`/user/9`)
+            .get(`/user/${userId}`)
             .set('Authorization', `Bearer ${authToken}`);
 
         expect(res.status).to.equal(200);
-        expect(res.body.data).to.have.property('id', 9);
+        expect(res.body.data).to.have.property('id', userId);
     });
 
     /** 📌 6. Erro ao buscar usuário inexistente */
@@ -117,7 +125,7 @@ describe('Testes da API de Usuários', () => {
     /** 📌 7. Atualizar usuário */
     it('✅ Deve atualizar o nome do usuário', async () => {
         const res = await request(app)
-            .put(`/user/10`)
+            .put(`/user/${userId}`)
             .set('Authorization', `Bearer ${authToken}`)
             .send({
                 name: 'User Atualizado',
@@ -144,7 +152,7 @@ describe('Testes da API de Usuários', () => {
     /** 📌 9. Excluir usuário */
     it('✅ Deve excluir um usuário pelo ID', async () => {
         const res = await request(app)
-            .delete(`/user/32`)
+            .delete(`/user/${userId}`)
             .set('Authorization', `Bearer ${authToken}`);
 
         expect(res.status).to.equal(204);
