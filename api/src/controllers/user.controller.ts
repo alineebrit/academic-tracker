@@ -73,7 +73,11 @@ export class UserController {
             const userId = parseInt(req.params.id, 10);
             const user = await this.userService.getUserById(userId);
 
+            if (!user) {
+                throw new Error('User não existe.');
+            }
             res.status(200).json({ data: user });
+            return;
         } catch (err) {
             res.status(500).json({
                 error: `Não foi possível encontrar o usuário de id ${req.params.id}`,
@@ -106,7 +110,7 @@ export class UserController {
             const userId = parseInt(req.params.id, 10);
             await this.userService.deleteUser(userId);
 
-            res.status(200).json({ message: 'Usuário deletado com sucesso' });
+            res.status(204).json({ message: 'Usuário deletado com sucesso' });
             return;
         } catch (err) {
             res.status(500).json({

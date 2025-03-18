@@ -50,16 +50,4 @@ export class UserService {
 
         return allowedRoles.includes(user.role);
     };
-
-    // async verificarPermissao(userId: number, requiredRole: string) {
-    //     const user = await prisma.user.findUnique({ where: { id: userId } });
-
-    //     if (!user) {
-    //         throw new Error("Usuário não encontrado");
-    //     }
-
-    //     if (user.role !== requiredRole) {
-    //         throw new Error("Acesso negado. Permissão insuficiente.");
-    //     }
-    // }
 }
