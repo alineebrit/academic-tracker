@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response } from "express";
-import { GrupoService } from "../service/grupo.service";
-import { Grupo } from "@prisma/client";
+import { Request, Response } from 'express';
+import { GrupoService } from '../service/grupo.service';
+import { Grupo } from '@prisma/client';
 
 export class GrupoController {
     private readonly grupoService: GrupoService;
@@ -13,21 +13,22 @@ export class GrupoController {
     createGrupo = async (req: Request, res: Response) => {
         try {
             const grupoData: Grupo = req.body;
-            const nome = grupoData.name;
+            const name = grupoData.name;
 
-            if (!nome) {
-                res.status(400).json({
-                    error: "Nome do grupo não preenchido",
+            if (!name) {
+                res.status(401).json({
+                    error: 'Nome do grupo não preenchido',
                 });
                 return;
             }
 
             const grupo = await this.grupoService.createGrupo(grupoData);
+
             res.status(201).json({ data: grupo });
             return;
         } catch (error) {
             res.status(500).json({
-                error: "Não foi possível criar o grupo",
+                error: 'Não foi possível criar o grupo',
             });
             return;
         }
@@ -54,7 +55,7 @@ export class GrupoController {
             return;
         } catch (error) {
             res.status(500).json({
-                error: "Não foi possível atualizar o grupo",
+                error: 'Não foi possível atualizar o grupo',
             });
             return;
         }
@@ -66,7 +67,7 @@ export class GrupoController {
             res.status(200).json({ data: grupos });
         } catch (error) {
             res.status(500).json({
-                error: "Erro ao buscar os grupos",
+                error: 'Erro ao buscar os grupos',
             });
         }
     };
@@ -77,7 +78,7 @@ export class GrupoController {
             const grupo = await this.grupoService.getGrupoById(grupoId);
 
             if (!grupo) {
-                res.status(404).json({
+                res.status(500).json({
                     error: `Grupo de ID ${req.params.id} não encontrado`,
                 });
                 return;
@@ -103,7 +104,7 @@ export class GrupoController {
                 return;
             }
 
-            res.status(204).json({ message: "Grupo deletado com sucesso" });
+            res.status(204).json({ message: 'Grupo deletado com sucesso' });
             return;
         } catch (error) {
             res.status(500).json({
