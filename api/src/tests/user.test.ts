@@ -1,6 +1,6 @@
 import chai from 'chai';
 import request from 'supertest';
-import app from '../server'; // Certifique-se de exportar corretamente o app
+import app from '../server';
 
 const { expect } = chai;
 
@@ -16,7 +16,7 @@ describe('Testes da API de Usuários', () => {
             password: '123',
         });
 
-        console.log('Resposta do login:', authRes.body); // Debugando a resposta
+        console.log('Resposta do login:', authRes.body);
         authToken = authRes.body.token;
         expect(authToken).to.be.a('string');
 
