@@ -1,4 +1,3 @@
-import { $Enums } from '@prisma/client';
 import { User } from '../models/user';
 import { UserRepository } from '../repositories/user.repository';
 export class UserService {
@@ -37,29 +36,4 @@ export class UserService {
             .countByEmail(email)
             .then((e) => e >= 1);
     };
-
-    isAdminOrProfessor = async (userId: number): Promise<boolean> => {
-        const user = await this.getUserById(userId);
-
-        if (!user) return false;
-
-        const allowedRoles: $Enums.UserRole[] = [
-            $Enums.UserRole.ADMIN,
-            $Enums.UserRole.PROFESSOR,
-        ];
-
-        return allowedRoles.includes(user.role);
-    };
-
-    // async verificarPermissao(userId: number, requiredRole: string) {
-    //     const user = await prisma.user.findUnique({ where: { id: userId } });
-
-    //     if (!user) {
-    //         throw new Error("Usuário não encontrado");
-    //     }
-
-    //     if (user.role !== requiredRole) {
-    //         throw new Error("Acesso negado. Permissão insuficiente.");
-    //     }
-    // }
 }

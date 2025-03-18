@@ -20,8 +20,8 @@ model User {
   turmas    Turma[]
   grupoId   Int?
   grupo     Grupo?    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum UserRole {

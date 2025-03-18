@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Atividade } from "./../models/atividade";
-import { Request, Response } from "express";
-import { AtividadeService } from "../service/atividade.service";
+import { Atividade } from './../models/atividade';
+import { Request, Response } from 'express';
+import { AtividadeService } from '../service/atividade.service';
 
 export class AtividadeController {
     private readonly atividadeService: AtividadeService;
@@ -17,7 +17,7 @@ export class AtividadeController {
 
             if (!title) {
                 res.status(401).json({
-                    error: "Título da atividade não preenchido",
+                    error: 'Título da atividade não preenchido',
                 });
             }
 
@@ -27,7 +27,7 @@ export class AtividadeController {
             return;
         } catch (error) {
             res.status(500).json({
-                error: "Não foi possível criar a atividade",
+                error: 'Não foi possível criar a atividade',
             });
             return;
         }
@@ -47,7 +47,7 @@ export class AtividadeController {
             return;
         } catch (error) {
             res.status(500).json({
-                error: "Não foi possível atualizar a atividade",
+                error: 'Não foi possível atualizar a atividade',
             });
             return;
         }
@@ -61,7 +61,7 @@ export class AtividadeController {
             return;
         } catch (error) {
             res.status(500).json({
-                error: "Error ao utilizar o getAllAtividades",
+                error: 'Error ao utilizar o getAllAtividades',
             });
             return;
         }
@@ -73,8 +73,12 @@ export class AtividadeController {
             const atividade =
                 await this.atividadeService.getAtividadeById(atividadeId);
 
-            res.status(200).json({ data: atividade });
-            return;
+            if (atividade) {
+                res.status(200).json({ data: atividade });
+                return;
+            }
+
+            throw new Error('Atividade não existe.');
         } catch (err) {
             res.status(500).json({
                 error: `Não foi possível encontrar a atividade de id ${req.params.id}`,

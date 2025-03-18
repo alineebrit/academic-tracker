@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response } from "express";
-import { NoteService } from "../service/note.service";
-import { Note } from "../models/note";
+import { Request, Response } from 'express';
+import { NoteService } from '../service/note.service';
+import { Note } from '../models/note';
 
 export class NoteController {
     private readonly noteService: NoteService;
@@ -16,8 +16,8 @@ export class NoteController {
             const titulo = noteData.title;
 
             if (!titulo) {
-                res.status(400).json({
-                    error: "Título da nota não preenchido",
+                res.status(401).json({
+                    error: 'Título da nota não preenchido',
                 });
                 return;
             }
@@ -27,7 +27,7 @@ export class NoteController {
             return;
         } catch (error) {
             res.status(500).json({
-                error: "Não foi possível criar a nota",
+                error: 'Não foi possível criar a nota',
             });
             return;
         }
@@ -44,7 +44,7 @@ export class NoteController {
             );
 
             if (!updatedNote) {
-                res.status(404).json({
+                res.status(500).json({
                     error: `Nota de ID ${id} não encontrada`,
                 });
                 return;
@@ -54,7 +54,7 @@ export class NoteController {
             return;
         } catch (error) {
             res.status(500).json({
-                error: "Não foi possível atualizar a nota",
+                error: 'Não foi possível atualizar a nota',
             });
             return;
         }
@@ -66,7 +66,7 @@ export class NoteController {
             res.status(200).json({ data: notes });
         } catch (error) {
             res.status(500).json({
-                error: "Erro ao buscar as notas",
+                error: 'Erro ao buscar as notas',
             });
         }
     };
@@ -77,7 +77,7 @@ export class NoteController {
             const note = await this.noteService.getNoteById(noteId);
 
             if (!note) {
-                res.status(404).json({
+                res.status(500).json({
                     error: `Nota de ID ${req.params.id} não encontrada`,
                 });
                 return;
@@ -103,7 +103,7 @@ export class NoteController {
                 return;
             }
 
-            res.status(204).json({ message: "Note deletada com sucesso" });
+            res.status(204).json({ message: 'Note deletada com sucesso' });
             return;
         } catch (error) {
             res.status(500).json({

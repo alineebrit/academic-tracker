@@ -30,24 +30,9 @@ export class TurmaController {
                 return;
             }
 
-            if (await this.userService.isAdminOrProfessor(userId)) {
-                res.status(403).json({
-                    error: 'Apenas permitido para PROFESSORES ou ADMIN',
-                });
-                return;
-            }
-
             const turma = await this.turmaService.createTurma(req.body);
             res.status(201).json({ data: turma });
         } catch (error) {
-            if (error instanceof Error)
-                if (
-                    error.message ===
-                    'Usuário do tipo ALUNO não pode criar uma turma'
-                ) {
-                    res.status(400).json({ error: error.message });
-                    return;
-                }
             res.status(500).json({ error: 'Erro interno do servidor' });
             return;
         }
@@ -63,13 +48,6 @@ export class TurmaController {
                 Number(id),
                 turmaData
             );
-
-            // if (await this.userService.isAdminOrProfessor(turmaData.userId)) {
-            //     res.status(403).json({
-            //         error: 'Apenas permitido para PROFESSORES ou ADMIN',
-            //     });
-            //     return;
-            // }
 
             res.status(200).json({ data: Turma });
         } catch (error) {
@@ -98,11 +76,15 @@ export class TurmaController {
             const turmaId = parseInt(req.params.id, 10);
             const turma = await this.turmaService.getTurmaById(turmaId);
 
-            res.status(200).json({ data: turma });
-            return;
-        } catch (err) {
+            if (turma) {
+                res.status(200).json({ data: turma });
+                return;
+            }
+
+            throw new Error('Turma não existe');
+        } catch (error) {
             res.status(500).json({
-                error: `Não foi possível encontrar a Turma de id ${req.params.id}`,
+                error: 'Error ao buscar turma',
             });
             return;
         }
