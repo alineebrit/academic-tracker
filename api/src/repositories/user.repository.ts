@@ -22,6 +22,29 @@ export class UserRepository {
         return await this.userClient.findMany();
     };
 
+    async findAllPaginado(
+        page: number,
+        limit: number,
+        sortBy: string,
+        order: 'asc' | 'desc'
+    ) {
+        const skip = (page - 1) * limit;
+        
+        return this.userClient.findMany({
+            skip,
+            take: limit,
+            orderBy: {
+                [sortBy]: order
+            }
+        });
+    }
+
+     // Novo método para contar o total de User
+     async countUser() {
+        return this.userClient.count();
+    }
+
+
     getByIdUser = async (id: number): Promise<User | null> => {
         return await this.userClient.findUnique({ where: { id } });
     };
