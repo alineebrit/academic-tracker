@@ -67,6 +67,31 @@ export class AtividadeController {
         }
     };
 
+
+    getAllAtividadesPaginado = async (req: Request, res: Response): Promise<void>=> {
+        try {
+            // Extrair parâmetros de paginação da requisição
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const sortBy = (req.query.sortBy as string) || 'dueDate';
+            const order = (req.query.order as 'asc' | 'desc') || 'asc';
+            
+            // Buscar atividades paginadas
+            const atividades = await this.atividadeService.getAllAtividadePaginado({
+                page,
+                limit,
+                sortBy,
+                order
+            });
+            
+            res.status(200).json({ data: atividades });
+        } catch (error) {
+            console.error('Erro ao buscar atividades:', error);
+             res.status(500).json({ error: 'Erro ao buscar atividades' });
+        }
+    };
+
+
     getAtividadeById = async (req: Request, res: Response) => {
         try {
             const atividadeId = parseInt(req.params.id, 10);

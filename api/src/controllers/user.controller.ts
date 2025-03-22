@@ -46,6 +46,29 @@ export class UserController {
         }
     };
 
+    getAllUsersPaginado = async (req: Request, res: Response) :Promise<void>=> {
+        try {
+            // Extrair parâmetros de paginação da requisição
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const sortBy = (req.query.sortBy as string) || 'dueDate';
+            const order = (req.query.order as 'asc' | 'desc') || 'asc';
+            
+           
+            const user = await this.userService.getAllUsersPaginado({
+                page,
+                limit,
+                sortBy,
+                order
+            });
+            
+            res.status(200).json({ data: user });
+        } catch (error) {
+            console.error('Erro ao buscar user:', error);
+            res.status(500).json({ error: 'Erro ao buscar user' });
+        }
+    };
+
     getAllUsers = async (req: Request, res: Response) => {
         try {
             if (!req.user) {

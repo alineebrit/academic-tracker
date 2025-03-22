@@ -1,6 +1,25 @@
 import { GrupoRepository } from "../repositories/grupo.repository";
 import { Grupo } from "@prisma/client";
 
+interface PaginationParams {
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+    order?: 'asc' | 'desc';
+}
+
+interface PaginatedResult<T> {
+    data: T[];
+    meta: {
+        currentPage: number;
+        itemsPerPage: number;
+        totalItems: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+    };
+}
+
 export class GrupoService {
     private readonly grupoRepository = new GrupoRepository();
 
@@ -8,9 +27,42 @@ export class GrupoService {
         return await this.grupoRepository.createGrupo(grupo);
     }
 
+    
     async getAllGrupos() {
         return await this.grupoRepository.findAll();
     }
+
+    
+
+    getAllGruposPaginado = async (params: PaginationParams = {}): Promise<PaginatedResult<Grupo>> => {
+          // Valores padrão para paginação
+          const page = params.page || 1;
+          const limit = params.limit || 10;
+          const sortBy = params.sortBy || 'dueDate';
+          const order = params.order || 'asc';
+          
+          // Obter dados paginados e contagem total do repositório
+          const [grupos, totalItems] = await Promise.all([
+              this.grupoRepository.findAllPaginado(page, limit, sortBy, order),
+              this.grupoRepository.countGrupos()
+          ]);
+          
+          // Calcular metadados de paginação
+          const totalPages = Math.ceil(totalItems / limit);
+          
+          // Retornar resultado formatado
+          return {
+              data: grupos,
+              meta: {
+                  currentPage: page,
+                  itemsPerPage: limit,
+                  totalItems,
+                  totalPages,
+                  hasNextPage: page < totalPages,
+                  hasPrevPage: page > 1
+              }
+          };
+      };
 
     async getGrupoById(id: number) {
         return await this.grupoRepository.findById(id);
