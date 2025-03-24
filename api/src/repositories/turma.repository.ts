@@ -33,7 +33,6 @@ export class TurmaRepository {
         });
     }
 
-     // Novo método para contar o total de Turmas
      async countTurmas() {
         return this.turmaClient.count();
     }

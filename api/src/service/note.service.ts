@@ -33,22 +33,20 @@ export class NoteService {
     }
   
 getAllNotesPaginado = async (params: PaginationParams = {}): Promise<PaginatedResult<Note>> => {
-              // Valores padrão para paginação
+
               const page = params.page || 1;
               const limit = params.limit || 10;
               const sortBy = params.sortBy || 'dueDate';
               const order = params.order || 'asc';
-              
-              // Obter dados paginados e contagem total do repositório
+
               const [notes, totalItems] = await Promise.all([
                   this.noteRepository.findAllPaginado(page, limit, sortBy, order),
                   this.noteRepository.countNotes()
               ]);
               
-              // Calcular metadados de paginação
+
               const totalPages = Math.ceil(totalItems / limit);
               
-              // Retornar resultado formatado
               return {
                   data: notes,
                   meta: {

@@ -35,22 +35,22 @@ export class GrupoService {
     
 
     getAllGruposPaginado = async (params: PaginationParams = {}): Promise<PaginatedResult<Grupo>> => {
-          // Valores padrão para paginação
+ 
           const page = params.page || 1;
           const limit = params.limit || 10;
           const sortBy = params.sortBy || 'dueDate';
           const order = params.order || 'asc';
           
-          // Obter dados paginados e contagem total do repositório
+
           const [grupos, totalItems] = await Promise.all([
               this.grupoRepository.findAllPaginado(page, limit, sortBy, order),
               this.grupoRepository.countGrupos()
           ]);
           
-          // Calcular metadados de paginação
+
           const totalPages = Math.ceil(totalItems / limit);
           
-          // Retornar resultado formatado
+
           return {
               data: grupos,
               meta: {
