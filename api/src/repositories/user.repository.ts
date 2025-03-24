@@ -39,7 +39,6 @@ export class UserRepository {
         });
     }
 
-     // Novo método para contar o total de User
      async countUser() {
         return this.userClient.count();
     }

@@ -16,7 +16,6 @@ export class AtividadeRepository {
         return this.atividadeClient.findMany();
     }
 
-    // Novo método para buscar atividades com paginação
     async getAllAtividadePaginated(
         page: number,
         limit: number,
@@ -34,7 +33,6 @@ export class AtividadeRepository {
         });
     }
 
-    // Novo método para contar o total de atividades
     async countAtividades() {
         return this.atividadeClient.count();
     }

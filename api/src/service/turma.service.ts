@@ -45,22 +45,21 @@ export class TurmaService {
     };
 
      getAllTurmasPaginado = async (params: PaginationParams = {}): Promise<PaginatedResult<Turma>> => {
-              // Valores padrão para paginação
+
               const page = params.page || 1;
               const limit = params.limit || 10;
               const sortBy = params.sortBy || 'dueDate';
               const order = params.order || 'asc';
-              
-              // Obter dados paginados e contagem total do repositório
+
               const [turmas, totalItems] = await Promise.all([
                   this.turmaRepository.findAllPaginado(page, limit, sortBy, order),
                   this.turmaRepository.countTurmas()
               ]);
               
-              // Calcular metadados de paginação
+
               const totalPages = Math.ceil(totalItems / limit);
               
-              // Retornar resultado formatado
+
               return {
                   data: turmas,
                   meta: {

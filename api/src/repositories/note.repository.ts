@@ -32,7 +32,6 @@ export class NoteRepository {
         });
     }
 
-        // Novo método para contar o total de Notes
     async countNotes() {
         return this.noteClient.count();
     }
