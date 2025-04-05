@@ -32,7 +32,7 @@ export class AuthController {
 
             const token = this.authService.generateToken(user.id);
 
-            res.status(200).json({ token });
+            res.status(200).json({ token, user });
             return;
         } catch (error) {
             console.error(error);
