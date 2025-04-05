@@ -57,6 +57,29 @@ export class TurmaController {
         }
     };
 
+    getAllTurmasPaginado = async (req: Request, res: Response) :Promise<void>=> {
+        try {
+
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const sortBy = (req.query.sortBy as string) || 'dueDate';
+            const order = (req.query.order as 'asc' | 'desc') || 'asc';
+            
+           
+            const turma = await this.turmaService.getAllTurmasPaginado({
+                page,
+                limit,
+                sortBy,
+                order
+            });
+            
+            res.status(200).json({ data: turma });
+        } catch (error) {
+            console.error('Erro ao buscar turma:', error);
+            res.status(500).json({ error: 'Erro ao buscar turma' });
+        }
+    };
+
     getAllTurmas = async (req: Request, res: Response) => {
         try {
             const getAll = await this.turmaService.getAllTurmas();

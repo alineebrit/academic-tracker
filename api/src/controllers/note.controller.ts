@@ -71,6 +71,30 @@ export class NoteController {
         }
     };
 
+    getAllNotesPaginado = async (req: Request, res: Response) :Promise<void>=> {
+        try {
+   
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const sortBy = (req.query.sortBy as string) || 'dueDate';
+            const order = (req.query.order as 'asc' | 'desc') || 'asc';
+            
+           
+            const notes = await this.noteService.getAllNotesPaginado({
+                page,
+                limit,
+                sortBy,
+                order
+            });
+            
+            res.status(200).json({ data: notes });
+        } catch (error) {
+            console.error('Erro ao buscar notes:', error);
+            res.status(500).json({ error: 'Erro ao buscar notes' });
+        }
+    };
+
+
     getNoteById = async (req: Request, res: Response) => {
         try {
             const noteId = parseInt(req.params.id, 10);

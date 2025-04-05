@@ -72,6 +72,30 @@ export class GrupoController {
         }
     };
 
+    getAllGruposPaginado = async (req: Request, res: Response) :Promise<void>=> {
+        try {
+
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const sortBy = (req.query.sortBy as string) || 'dueDate';
+            const order = (req.query.order as 'asc' | 'desc') || 'asc';
+            
+           
+            const grupos = await this.grupoService.getAllGruposPaginado({
+                page,
+                limit,
+                sortBy,
+                order
+            });
+            
+            res.status(200).json({ data: grupos });
+        } catch (error) {
+            console.error('Erro ao buscar grupos:', error);
+            res.status(500).json({ error: 'Erro ao buscar grupos' });
+        }
+    };
+
+
     getGrupoById = async (req: Request, res: Response) => {
         try {
             const grupoId = parseInt(req.params.id, 10);

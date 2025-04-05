@@ -11,9 +11,31 @@ export class AtividadeRepository {
         return await this.atividadeClient.create({ data });
     };
 
-    getAllAtividade = async () => {
-        return await this.atividadeClient.findMany();
-    };
+    
+    async getAllAtividade() {
+        return this.atividadeClient.findMany();
+    }
+
+    async getAllAtividadePaginated(
+        page: number,
+        limit: number,
+        sortBy: string,
+        order: 'asc' | 'desc'
+    ) {
+        const skip = (page - 1) * limit;
+        
+        return this.atividadeClient.findMany({
+            skip,
+            take: limit,
+            orderBy: {
+                [sortBy]: order
+            }
+        });
+    }
+
+    async countAtividades() {
+        return this.atividadeClient.count();
+    }
 
     getByIdAtividade = async (id: number) => {
         return await this.atividadeClient.findUnique({ where: { id } });

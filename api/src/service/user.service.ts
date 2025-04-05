@@ -1,5 +1,26 @@
 import { User } from '../models/user';
 import { UserRepository } from '../repositories/user.repository';
+
+
+interface PaginationParams {
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+    order?: 'asc' | 'desc';
+}
+
+interface PaginatedResult<T> {
+    data: T[];
+    meta: {
+        currentPage: number;
+        itemsPerPage: number;
+        totalItems: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+    };
+}
+
 export class UserService {
     private readonly userRepository: UserRepository;
 
@@ -18,6 +39,35 @@ export class UserService {
     getAllUsers = async () => {
         return await this.userRepository.getAllUser();
     };
+
+    getAllUsersPaginado = async (params: PaginationParams = {}): Promise<PaginatedResult<User>> => {
+
+                  const page = params.page || 1;
+                  const limit = params.limit || 10;
+                  const sortBy = params.sortBy || 'dueDate';
+                  const order = params.order || 'asc';
+                  
+                  const [users, totalItems] = await Promise.all([
+                      this.userRepository.findAllPaginado(page, limit, sortBy, order),
+                      this.userRepository.countUser()
+                  ]);
+                  
+
+                  const totalPages = Math.ceil(totalItems / limit);
+                  
+                  return {
+                      data: users,
+                      meta: {
+                          currentPage: page,
+                          itemsPerPage: limit,
+                          totalItems,
+                          totalPages,
+                          hasNextPage: page < totalPages,
+                          hasPrevPage: page > 1
+                      }
+                  };
+              };
+        
 
     getUserById = async (id: number) => {
         return await this.userRepository.getByIdUser(id);

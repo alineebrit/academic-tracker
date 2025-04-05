@@ -15,6 +15,27 @@ export class NoteRepository {
         return await this.noteClient.findMany();
     }
 
+    async findAllPaginado(
+        page: number,
+        limit: number,
+        sortBy: string,
+        order: 'asc' | 'desc'
+    ) {
+        const skip = (page - 1) * limit;
+        
+        return this.noteClient.findMany({
+            skip,
+            take: limit,
+            orderBy: {
+                [sortBy]: order
+            }
+        });
+    }
+
+    async countNotes() {
+        return this.noteClient.count();
+    }
+
     async findById(id: number) {
         return await this.noteClient.findUnique({ where: { id } });
     }

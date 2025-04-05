@@ -14,6 +14,28 @@ export class GrupoRepository {
     async findAll() {
         return await this.grupoClient.findMany();
     }
+     
+     async findAllPaginado(
+        page: number,
+        limit: number,
+        sortBy: string,
+        order: 'asc' | 'desc'
+    ) {
+        const skip = (page - 1) * limit;
+        
+        return this.grupoClient.findMany({
+            skip,
+            take: limit,
+            orderBy: {
+                [sortBy]: order
+            }
+        });
+    }
+
+
+    async countGrupos() {
+        return this.grupoClient.count();
+    }
 
     async findById(id: number) {
         return await this.grupoClient.findUnique({ where: { id } });

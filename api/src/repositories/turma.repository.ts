@@ -16,6 +16,28 @@ export class TurmaRepository {
         return await this.turmaClient.findMany();
     };
 
+    async findAllPaginado(
+        page: number,
+        limit: number,
+        sortBy: string,
+        order: 'asc' | 'desc'
+    ) {
+        const skip = (page - 1) * limit;
+        
+        return this.turmaClient.findMany({
+            skip,
+            take: limit,
+            orderBy: {
+                [sortBy]: order
+            }
+        });
+    }
+
+     async countTurmas() {
+        return this.turmaClient.count();
+    }
+
+
     getByIdTurma = async (id: number) => {
         return await this.turmaClient.findUnique({ where: { id } });
     };
