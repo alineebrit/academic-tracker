@@ -1,5 +1,5 @@
-import { Atividade } from "../models/atividade";
-import { AtividadeRepository } from "../repositories/atividade.repository";
+import { Atividade } from '../models/atividade';
+import { AtividadeRepository } from '../repositories/atividade.repository';
 
 interface PaginationParams {
     page?: number;
@@ -35,20 +35,25 @@ export class AtividadeService {
         return await this.atividadeRepository.getAllAtividade();
     };
 
-    getAllAtividadePaginado = async (params: PaginationParams = {}): Promise<PaginatedResult<Atividade>> => {
-
+    getAllAtividadePaginado = async (
+        params: PaginationParams = {}
+    ): Promise<PaginatedResult<Atividade>> => {
         const page = params.page || 1;
         const limit = params.limit || 10;
         const sortBy = params.sortBy || 'dueDate';
         const order = params.order || 'asc';
-        
+
         const [atividades, totalItems] = await Promise.all([
-            this.atividadeRepository.getAllAtividadePaginated(page, limit, sortBy, order),
-            this.atividadeRepository.countAtividades()
+            this.atividadeRepository.getAllAtividadePaginated(
+                page,
+                limit,
+                sortBy,
+                order
+            ),
+            this.atividadeRepository.countAtividades(),
         ]);
-        
+
         const totalPages = Math.ceil(totalItems / limit);
-        
 
         return {
             data: atividades,
@@ -58,8 +63,8 @@ export class AtividadeService {
                 totalItems,
                 totalPages,
                 hasNextPage: page < totalPages,
-                hasPrevPage: page > 1
-            }
+                hasPrevPage: page > 1,
+            },
         };
     };
     getAtividadeById = async (id: number) => {
@@ -68,7 +73,12 @@ export class AtividadeService {
 
     updateAtividade = async (
         atividadeId: number,
-        data: Partial<{ title: string; description: string; dueDate: Date }>
+        data: Partial<{
+            title: string;
+            description: string;
+            dueDate: string;
+            grupoId: number;
+        }>
     ) => {
         return await this.atividadeRepository.updateAtividade(
             atividadeId,

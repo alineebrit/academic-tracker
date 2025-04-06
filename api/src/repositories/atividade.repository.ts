@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { Atividade } from "../models/atividade";
+import { PrismaClient } from '@prisma/client';
+import { Atividade } from '../models/atividade';
 export class AtividadeRepository {
     atividadeClient = new PrismaClient().atividade;
 
@@ -11,7 +11,6 @@ export class AtividadeRepository {
         return await this.atividadeClient.create({ data });
     };
 
-    
     async getAllAtividade() {
         return this.atividadeClient.findMany();
     }
@@ -23,13 +22,13 @@ export class AtividadeRepository {
         order: 'asc' | 'desc'
     ) {
         const skip = (page - 1) * limit;
-        
+
         return this.atividadeClient.findMany({
             skip,
             take: limit,
             orderBy: {
-                [sortBy]: order
-            }
+                [sortBy]: order,
+            },
         });
     }
 
@@ -43,7 +42,12 @@ export class AtividadeRepository {
 
     updateAtividade = async (
         atividadeId: number,
-        data: Partial<{ title: string; description: string; dueDate: Date }>
+        data: Partial<{
+            title: string;
+            description: string;
+            dueDate: string;
+            grupoId: number;
+        }>
     ) => {
         return await this.atividadeClient.update({
             where: { id: atividadeId },
