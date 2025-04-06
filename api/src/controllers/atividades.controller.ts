@@ -2,12 +2,15 @@
 import { Atividade } from './../models/atividade';
 import { Request, Response } from 'express';
 import { AtividadeService } from '../service/atividade.service';
+import { PrismaClient } from '@prisma/client';
 
 export class AtividadeController {
     private readonly atividadeService: AtividadeService;
+    atividadeClient = new PrismaClient().atividade;
 
     constructor() {
         this.atividadeService = new AtividadeService();
+        this.atividadeClient = new PrismaClient().atividade;
     }
 
     createAtividade = async (req: Request, res: Response) => {
@@ -54,42 +57,47 @@ export class AtividadeController {
     };
 
     getAllAtividades = async (req: Request, res: Response) => {
-        try {
-            const getAll = await this.atividadeService.getAllAtividade();
+        const { grupoId } = req.query;
 
-            res.status(200).json({ data: getAll });
-            return;
-        } catch (error) {
-            res.status(500).json({
-                error: 'Error ao utilizar o getAllAtividades',
+        try {
+            const atividades = await this.atividadeClient.findMany({
+                where: grupoId
+                    ? { grupoId: parseInt(grupoId as string) }
+                    : undefined,
+                orderBy: { dueDate: 'asc' },
             });
-            return;
+
+            res.status(200).json({ data: atividades });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Erro ao buscar atividades' });
         }
     };
 
-
-    getAllAtividadesPaginado = async (req: Request, res: Response): Promise<void>=> {
+    getAllAtividadesPaginado = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
         try {
-        
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 10;
             const sortBy = (req.query.sortBy as string) || 'dueDate';
             const order = (req.query.order as 'asc' | 'desc') || 'asc';
-            
-            const atividades = await this.atividadeService.getAllAtividadePaginado({
-                page,
-                limit,
-                sortBy,
-                order
-            });
-            
+
+            const atividades =
+                await this.atividadeService.getAllAtividadePaginado({
+                    page,
+                    limit,
+                    sortBy,
+                    order,
+                });
+
             res.status(200).json({ data: atividades });
         } catch (error) {
             console.error('Erro ao buscar atividades:', error);
-             res.status(500).json({ error: 'Erro ao buscar atividades' });
+            res.status(500).json({ error: 'Erro ao buscar atividades' });
         }
     };
-
 
     getAtividadeById = async (req: Request, res: Response) => {
         try {
