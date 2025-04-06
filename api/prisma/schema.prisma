@@ -52,10 +52,10 @@ model Atividade {
   title       String
   description String?
   dueDate     DateTime?
-  id          Int              @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   grupoId     Int?
-  status      atividadeStatus  @default(NAO_INICIADA)
-  grupo       Grupo?           @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  status      atividadeStatus @default(NAO_INICIADA)
+  grupo       Grupo?          @relation(fields: [grupoId], references: [id], onDelete: Cascade)
 }
 
 enum UserRole {

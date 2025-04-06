@@ -30,10 +30,20 @@ export class TurmaController {
                 return;
             }
 
+            if (user.role === 'ALUNO') {
+                res.status(401).json({
+                    error: 'Usuário do tipo aluno não pode criar turma',
+                });
+                return;
+            }
+
             const turma = await this.turmaService.createTurma(req.body);
             res.status(201).json({ data: turma });
         } catch (error) {
-            res.status(500).json({ error: 'Erro interno do servidor' });
+            res.status(500).json({
+                error: 'Erro interno do servidor',
+                message: error,
+            });
             return;
         }
     };
@@ -57,22 +67,23 @@ export class TurmaController {
         }
     };
 
-    getAllTurmasPaginado = async (req: Request, res: Response) :Promise<void>=> {
+    getAllTurmasPaginado = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
         try {
-
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 10;
             const sortBy = (req.query.sortBy as string) || 'dueDate';
             const order = (req.query.order as 'asc' | 'desc') || 'asc';
-            
-           
+
             const turma = await this.turmaService.getAllTurmasPaginado({
                 page,
                 limit,
                 sortBy,
-                order
+                order,
             });
-            
+
             res.status(200).json({ data: turma });
         } catch (error) {
             console.error('Erro ao buscar turma:', error);
