@@ -1,6 +1,6 @@
-import { UserRepository } from "./../repositories/user.repository";
-import { Turma } from "@prisma/client";
-import { TurmaRepository } from "../repositories/turma.repository";
+import { UserRepository } from './../repositories/user.repository';
+import { Turma } from '@prisma/client';
+import { TurmaRepository } from '../repositories/turma.repository';
 
 interface PaginationParams {
     page?: number;
@@ -33,8 +33,8 @@ export class TurmaService {
     createTurma = async (data: Turma) => {
         const userRole = await this.userRepository.getUserRole(data.userId);
 
-        if (userRole === "ALUNO") {
-            throw new Error("Usuário do tipo ALUNO não pode criar uma turma");
+        if (userRole === 'ALUNO') {
+            throw new Error('Usuário do tipo ALUNO não pode criar uma turma');
         }
 
         return await this.turmaRepository.createTurma(data);
@@ -44,35 +44,33 @@ export class TurmaService {
         return await this.turmaRepository.getAllTurma();
     };
 
-     getAllTurmasPaginado = async (params: PaginationParams = {}): Promise<PaginatedResult<Turma>> => {
+    getAllTurmasPaginado = async (
+        params: PaginationParams = {}
+    ): Promise<PaginatedResult<Turma>> => {
+        const page = params.page || 1;
+        const limit = params.limit || 10;
+        const sortBy = params.sortBy || 'dueDate';
+        const order = params.order || 'asc';
 
-              const page = params.page || 1;
-              const limit = params.limit || 10;
-              const sortBy = params.sortBy || 'dueDate';
-              const order = params.order || 'asc';
+        const [turmas, totalItems] = await Promise.all([
+            this.turmaRepository.findAllPaginado(page, limit, sortBy, order),
+            this.turmaRepository.countTurmas(),
+        ]);
 
-              const [turmas, totalItems] = await Promise.all([
-                  this.turmaRepository.findAllPaginado(page, limit, sortBy, order),
-                  this.turmaRepository.countTurmas()
-              ]);
-              
+        const totalPages = Math.ceil(totalItems / limit);
 
-              const totalPages = Math.ceil(totalItems / limit);
-              
-
-              return {
-                  data: turmas,
-                  meta: {
-                      currentPage: page,
-                      itemsPerPage: limit,
-                      totalItems,
-                      totalPages,
-                      hasNextPage: page < totalPages,
-                      hasPrevPage: page > 1
-                  }
-              };
-          };
-    
+        return {
+            data: turmas,
+            meta: {
+                currentPage: page,
+                itemsPerPage: limit,
+                totalItems,
+                totalPages,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1,
+            },
+        };
+    };
 
     getTurmaById = async (id: number) => {
         return await this.turmaRepository.getByIdTurma(id);

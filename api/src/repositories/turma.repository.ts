@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { Turma } from "../models/turma";
+import { PrismaClient } from '@prisma/client';
+import { Turma } from '../models/turma';
 
 export class TurmaRepository {
     turmaClient = new PrismaClient().turma;
@@ -23,20 +23,19 @@ export class TurmaRepository {
         order: 'asc' | 'desc'
     ) {
         const skip = (page - 1) * limit;
-        
+
         return this.turmaClient.findMany({
             skip,
             take: limit,
             orderBy: {
-                [sortBy]: order
-            }
+                [sortBy]: order,
+            },
         });
     }
 
-     async countTurmas() {
+    async countTurmas() {
         return this.turmaClient.count();
     }
-
 
     getByIdTurma = async (id: number) => {
         return await this.turmaClient.findUnique({ where: { id } });

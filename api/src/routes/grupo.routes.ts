@@ -185,4 +185,11 @@ router.delete(
     grupoController.deleteGrupo
 );
 
+router.get(
+    '/:id/grupos',
+    authenticateToken,
+    validateRole(['ADMIN', 'PROFESSOR', 'ALUNO']),
+    grupoController.getGruposByTurmaId
+);
+
 export default router;

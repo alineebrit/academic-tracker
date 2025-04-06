@@ -1,5 +1,5 @@
-import { GrupoRepository } from "../repositories/grupo.repository";
-import { Grupo } from "@prisma/client";
+import { GrupoRepository } from '../repositories/grupo.repository';
+import { Grupo } from '@prisma/client';
 
 interface PaginationParams {
     page?: number;
@@ -27,42 +27,37 @@ export class GrupoService {
         return await this.grupoRepository.createGrupo(grupo);
     }
 
-    
     async getAllGrupos() {
         return await this.grupoRepository.findAll();
     }
 
-    
+    getAllGruposPaginado = async (
+        params: PaginationParams = {}
+    ): Promise<PaginatedResult<Grupo>> => {
+        const page = params.page || 1;
+        const limit = params.limit || 10;
+        const sortBy = params.sortBy || 'dueDate';
+        const order = params.order || 'asc';
 
-    getAllGruposPaginado = async (params: PaginationParams = {}): Promise<PaginatedResult<Grupo>> => {
- 
-          const page = params.page || 1;
-          const limit = params.limit || 10;
-          const sortBy = params.sortBy || 'dueDate';
-          const order = params.order || 'asc';
-          
+        const [grupos, totalItems] = await Promise.all([
+            this.grupoRepository.findAllPaginado(page, limit, sortBy, order),
+            this.grupoRepository.countGrupos(),
+        ]);
 
-          const [grupos, totalItems] = await Promise.all([
-              this.grupoRepository.findAllPaginado(page, limit, sortBy, order),
-              this.grupoRepository.countGrupos()
-          ]);
-          
+        const totalPages = Math.ceil(totalItems / limit);
 
-          const totalPages = Math.ceil(totalItems / limit);
-          
-
-          return {
-              data: grupos,
-              meta: {
-                  currentPage: page,
-                  itemsPerPage: limit,
-                  totalItems,
-                  totalPages,
-                  hasNextPage: page < totalPages,
-                  hasPrevPage: page > 1
-              }
-          };
-      };
+        return {
+            data: grupos,
+            meta: {
+                currentPage: page,
+                itemsPerPage: limit,
+                totalItems,
+                totalPages,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1,
+            },
+        };
+    };
 
     async getGrupoById(id: number) {
         return await this.grupoRepository.findById(id);
@@ -75,4 +70,8 @@ export class GrupoService {
     async deleteGrupo(id: number) {
         return await this.grupoRepository.delete(id);
     }
+
+    getGruposByTurmaId = async (id: number) => {
+        return await this.grupoRepository.getGruposByTurmaId(id);
+    };
 }

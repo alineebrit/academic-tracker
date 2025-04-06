@@ -151,4 +151,39 @@ export class GrupoController {
             return;
         }
     };
+
+    getGruposByTurmaId = async (req: Request, res: Response) => {
+        const { id } = req.params;
+
+        try {
+            const intId = parseInt(id);
+            if (!id) {
+                res.status(404).json({
+                    message: 'Id obrigatório!',
+                });
+                return;
+            }
+
+            const turma = await this.turmaService.getTurmaById(intId);
+
+            if (!turma) {
+                res.status(404).json({
+                    message: 'Turma não existe!',
+                });
+                return;
+            }
+            const grupos = await this.grupoService.getGruposByTurmaId(intId);
+
+            res.status(200).json({
+                data: grupos,
+            });
+            return;
+        } catch (error) {
+            console.error('Erro ao buscar grupos por turma:', error);
+            res.status(500).json({
+                message: 'Erro interno ao buscar grupos da turma.',
+            });
+            return;
+        }
+    };
 }

@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, Grupo } from "@prisma/client";
+import { PrismaClient, Prisma, Grupo } from '@prisma/client';
 
 export class GrupoRepository {
     grupoClient = new PrismaClient().grupo;
@@ -14,24 +14,23 @@ export class GrupoRepository {
     async findAll() {
         return await this.grupoClient.findMany();
     }
-     
-     async findAllPaginado(
+
+    async findAllPaginado(
         page: number,
         limit: number,
         sortBy: string,
         order: 'asc' | 'desc'
     ) {
         const skip = (page - 1) * limit;
-        
+
         return this.grupoClient.findMany({
             skip,
             take: limit,
             orderBy: {
-                [sortBy]: order
-            }
+                [sortBy]: order,
+            },
         });
     }
-
 
     async countGrupos() {
         return this.grupoClient.count();
@@ -48,4 +47,12 @@ export class GrupoRepository {
     async delete(id: number) {
         return await this.grupoClient.delete({ where: { id } });
     }
+
+    getGruposByTurmaId = async (id: number) => {
+        return await this.grupoClient.findMany({
+            where: {
+                turmaId: id,
+            },
+        });
+    };
 }
