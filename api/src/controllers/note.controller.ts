@@ -16,7 +16,7 @@ export class NoteController {
             const titulo = noteData.title;
 
             if (!titulo) {
-                res.status(401).json({
+                res.status(404).json({
                     error: 'Título da nota não preenchido',
                 });
                 return;
@@ -28,6 +28,7 @@ export class NoteController {
         } catch (error) {
             res.status(500).json({
                 error: 'Não foi possível criar a nota',
+                message: error,
             });
             return;
         }
@@ -71,29 +72,29 @@ export class NoteController {
         }
     };
 
-    getAllNotesPaginado = async (req: Request, res: Response) :Promise<void>=> {
+    getAllNotesPaginado = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
         try {
-   
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 10;
             const sortBy = (req.query.sortBy as string) || 'dueDate';
             const order = (req.query.order as 'asc' | 'desc') || 'asc';
-            
-           
+
             const notes = await this.noteService.getAllNotesPaginado({
                 page,
                 limit,
                 sortBy,
-                order
+                order,
             });
-            
+
             res.status(200).json({ data: notes });
         } catch (error) {
             console.error('Erro ao buscar notes:', error);
             res.status(500).json({ error: 'Erro ao buscar notes' });
         }
     };
-
 
     getNoteById = async (req: Request, res: Response) => {
         try {

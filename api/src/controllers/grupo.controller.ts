@@ -2,12 +2,15 @@
 import { Request, Response } from 'express';
 import { GrupoService } from '../service/grupo.service';
 import { Grupo } from '@prisma/client';
+import { TurmaService } from '../service/turma.service';
 
 export class GrupoController {
     private readonly grupoService: GrupoService;
+    private readonly turmaService: TurmaService;
 
     constructor() {
         this.grupoService = new GrupoService();
+        this.turmaService = new TurmaService();
     }
 
     createGrupo = async (req: Request, res: Response) => {
@@ -15,11 +18,21 @@ export class GrupoController {
             const grupoData: Grupo = req.body;
             const name = grupoData.name;
 
-            if (!name) {
+            if (!name || !grupoData.turmaId) {
                 res.status(401).json({
-                    error: 'Nome do grupo não preenchido',
+                    error: 'Campo obrigatório não preenchido',
                 });
                 return;
+            }
+
+            if (grupoData.turmaId) {
+                const turmaValid = await this.turmaService.getTurmaById(
+                    grupoData.turmaId
+                );
+                if (!turmaValid) {
+                    res.status(404).json({ error: 'Turma não existe' });
+                    return;
+                }
             }
 
             const grupo = await this.grupoService.createGrupo(grupoData);
@@ -29,6 +42,7 @@ export class GrupoController {
         } catch (error) {
             res.status(500).json({
                 error: 'Não foi possível criar o grupo',
+                message: error,
             });
             return;
         }
@@ -72,29 +86,29 @@ export class GrupoController {
         }
     };
 
-    getAllGruposPaginado = async (req: Request, res: Response) :Promise<void>=> {
+    getAllGruposPaginado = async (
+        req: Request,
+        res: Response
+    ): Promise<void> => {
         try {
-
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 10;
             const sortBy = (req.query.sortBy as string) || 'dueDate';
             const order = (req.query.order as 'asc' | 'desc') || 'asc';
-            
-           
+
             const grupos = await this.grupoService.getAllGruposPaginado({
                 page,
                 limit,
                 sortBy,
-                order
+                order,
             });
-            
+
             res.status(200).json({ data: grupos });
         } catch (error) {
             console.error('Erro ao buscar grupos:', error);
             res.status(500).json({ error: 'Erro ao buscar grupos' });
         }
     };
-
 
     getGrupoById = async (req: Request, res: Response) => {
         try {
